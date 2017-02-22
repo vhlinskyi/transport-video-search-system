@@ -3,6 +3,9 @@ package com.maxclay.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
+ * User data transfer object. Used for transferring user-related data, for example in case of user registration, when
+ * additional password field is required.
+ *
  * @author Vlad Glinskiy
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

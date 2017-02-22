@@ -9,6 +9,8 @@ import com.maxclay.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -42,7 +44,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAuthenticatedUser() {
-        return null;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new ResourceNotFoundException("Authenticated user not found");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof org.springframework.security.core.userdetails.User)) {
+            throw new ResourceNotFoundException("Authenticated user not found");
+        }
+
+        org.springframework.security.core.userdetails.User userDetails =
+                (org.springframework.security.core.userdetails.User) principal;
+
+        return getByEmail(userDetails.getUsername());
     }
 
     @Override

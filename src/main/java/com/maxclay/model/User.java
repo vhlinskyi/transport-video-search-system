@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 
 /**
+ * Representation of user.
+ *
  * @author Vlad Glinskiy
  */
 @Document(collection = User.COLLECTION_NAME)

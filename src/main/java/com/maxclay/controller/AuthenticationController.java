@@ -17,6 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 /**
+ * Spring's {@link org.springframework.web.bind.annotation.RestController}, which handles users' registration requests.
+ *
  * @author Vlad Glinskiy
  */
 @RestController
@@ -47,13 +49,4 @@ public class AuthenticationController {
                 .body(conversionService.convert(user, UserDto.class));
     }
 
-    @RequestMapping(value = "/hello", method = RequestMethod.GET)
-    public String helloWorld() {
-        return "Hello, World!";
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String routes() {
-        return "ROUTES";
-    }
 }

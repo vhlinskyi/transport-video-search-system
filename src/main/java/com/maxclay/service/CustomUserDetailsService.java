@@ -17,6 +17,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * Custom user details service which is used for user authentication.
+ *
  * @author Vlad Glinskiy
  */
 @Service

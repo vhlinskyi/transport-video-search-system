@@ -9,6 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
+ * Configuration, which allows to secure application's endpoints. Creates
+ * {@link org.springframework.security.crypto.password.PasswordEncoder} bean for performing passwords hashing.
+ *
  * @author Vlad Glinskiy
  */
 @Configuration
@@ -27,9 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/").permitAll()
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
-                .passwordParameter("password")
-                .and()
-                .csrf().disable();//TODO enable it to prevent xss?
+                .passwordParameter("password");
     }
 
     @Bean
