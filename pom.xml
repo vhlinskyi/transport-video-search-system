@@ -9,6 +9,9 @@
 	<name>transport-video-search-system</name>
 
 	<modules>
+		<module>config-service</module>
+		<module>registry</module>
+		<module>api-gateway</module>
 		<module>auth-service</module>
 	</modules>
 

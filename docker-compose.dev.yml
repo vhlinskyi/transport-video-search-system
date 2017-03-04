@@ -1,0 +1,22 @@
+version: '2'
+services:
+  config-service:
+    build: config-service
+    ports:
+      - 8888:8888
+
+  registry:
+    build: registry
+
+  api-gateway:
+    build: api-gateway
+
+  auth-service:
+    build: auth-service
+    ports:
+      - 5000:5000
+
+  auth-mongodb:
+    build: mongodb
+    ports:
+      - 25000:27017

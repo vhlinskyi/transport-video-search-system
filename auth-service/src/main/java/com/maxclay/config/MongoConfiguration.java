@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.net.UnknownHostException;
+
 /**
  * Configuration, which allows to adjust connection to the MongoDB server and creates
  * {@link org.springframework.data.mongodb.core.MongoTemplate} bean.
@@ -15,22 +17,22 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 @Configuration
 public class MongoConfiguration {
 
-    @Value("${mongo.host}")
+    @Value("${mongodb.host}")
     private String host;
 
-    @Value("${mongo.port}")
+    @Value("${mongodb.port}")
     private Integer port;
 
-    @Value("${mongo.database}")
+    @Value("${mongodb.database}")
     private String databaseName;
 
     @Bean
-    public MongoTemplate mongoTemplate() {
+    public MongoTemplate mongoTemplate() throws UnknownHostException {
         return new MongoTemplate(mongoClient(), databaseName);
     }
 
     @Bean
-    public MongoClient mongoClient() {
+    public MongoClient mongoClient() throws UnknownHostException {
         return new MongoClient(host, port);
     }
 

@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findOne(id);
         if (user == null) {
-            String message = String.format("User with id = '' not found", id);
+            String message = String.format("User with id = '%s' not found", id);
             throw new ResourceNotFoundException(message);
         }
 
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            String message = String.format("User with email = '' not found", email);
+            String message = String.format("User with email = '%s' not found", email);
             throw new ResourceNotFoundException(message);
         }
 
