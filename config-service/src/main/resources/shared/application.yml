@@ -20,8 +20,4 @@ eureka:
 security:
   oauth2:
     resource:
-      user-info-uri: http://auth-service:5000/uaa/users/current
-
-spring:
-  rabbitmq:
-    host: rabbitmq
+      user-info-uri: http://auth-service:5000/auth-service/users/current

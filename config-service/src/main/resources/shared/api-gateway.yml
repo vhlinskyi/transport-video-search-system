@@ -18,10 +18,15 @@ zuul:
 
   routes:
     auth-service:
-        path: /uaa/**
+        path: /auth-service/**
         url: http://auth-service:5000
         stripPrefix: false
         sensitiveHeaders:
+    account-service:
+            path: /account-service/**
+            serviceId: account-service
+            stripPrefix: false
+            sensitiveHeaders:
 
 server:
   port: 4000

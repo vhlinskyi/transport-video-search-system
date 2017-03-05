@@ -3,13 +3,13 @@ package com.maxclay.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * User data transfer object. Used for transferring user-related data, for example in case of user registration, when
- * additional password field is required.
+ * Account data transfer object. Used for transferring user-related data, for example in case of registration user's
+ * account, when additional password field is required.
  *
  * @author Vlad Glinskiy
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDto {
+public class AccountDto {
 
     private String id;
     private String name;
@@ -60,7 +60,7 @@ public class UserDto {
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("class UserDto {\n");
+        sb.append("class AccountDto {\n");
         sb.append("  id: ").append(id).append("\n");
         sb.append("  name: ").append(name).append("\n");
         sb.append("  email: ").append(email).append("\n");

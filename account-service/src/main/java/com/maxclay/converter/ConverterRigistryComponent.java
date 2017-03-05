@@ -24,12 +24,12 @@ public class ConverterRigistryComponent {
     private ConversionServiceFactoryBean conversionServiceFactoryBean;
 
     @Autowired
-    @Qualifier("userToUserDto")
-    private Converter userToUserDto;
+    @Qualifier("accountDtoToAccount")
+    private Converter accountDtoToAccount;
 
     @Autowired
-    @Qualifier("userToUserDtoInverse")
-    private Converter userToUserDtoInverse;
+    @Qualifier("accountDtoToUserDto")
+    private Converter accountDtoToUserDto;
 
     @PostConstruct
     private void init() {
@@ -37,8 +37,8 @@ public class ConverterRigistryComponent {
         ConversionService conversionService = conversionServiceFactoryBean.getObject();
         ConverterRegistry registry = (ConverterRegistry) conversionService;
 
-        registry.addConverter(this.userToUserDto);
-        registry.addConverter(this.userToUserDtoInverse);
+        registry.addConverter(this.accountDtoToAccount);
+        registry.addConverter(this.accountDtoToUserDto);
     }
 
 }

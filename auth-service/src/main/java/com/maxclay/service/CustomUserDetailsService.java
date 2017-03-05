@@ -21,18 +21,18 @@ import java.util.List;
  *
  * @author Vlad Glinskiy
  */
-@Service
+@Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         com.maxclay.model.User user;
         try {
-            user = userService.getByEmail(email);
+            user = userService.get(username);
         } catch (ResourceNotFoundException e) {
             throw new UsernameNotFoundException(e.getMessage());
         }
@@ -59,7 +59,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private User createUser(com.maxclay.model.User user, List<GrantedAuthority> authorities) {
-        return new User(user.getEmail(), user.getPassword(), authorities);
+        return new User(user.getUsername(), user.getPassword(), authorities);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(com.maxclay.model.User user) {

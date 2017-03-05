@@ -57,4 +57,26 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
+
+  account-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      ACCOUNT_SERVICE_PASSWORD: ${ACCOUNT_SERVICE_PASSWORD}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+    image: maxclay/transport-video-search-system-service
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  account-mongodb:
+    environment:
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+    image: maxclay/transport-video-search-system-mongodb
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
         

@@ -1,21 +1,13 @@
-package com.maxclay.model;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
+package com.maxclay.dto;
 
 /**
- * Representation of user.
+ * User data transfer object. Used for transferring user-related data, for example in case of user's registration in
+ * auth service.
  *
  * @author Vlad Glinskiy
  */
-@Document(collection = User.COLLECTION_NAME)
-public class User implements Serializable {
+public class UserDto {
 
-    public static final String COLLECTION_NAME = "users";
-
-    @Id
     private String username;
     private String password;
 
@@ -39,7 +31,7 @@ public class User implements Serializable {
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("class User {\n");
+        sb.append("class UserDto {\n");
         sb.append("  name: ").append(username).append("\n");
         sb.append("  password: ").append(password).append("\n");
         sb.append("}\n");
