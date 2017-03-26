@@ -27,6 +27,11 @@ zuul:
             serviceId: account-service
             stripPrefix: false
             sensitiveHeaders:
+    recognition-service:
+            path: /recognition-service/**
+            serviceId: recognition-service
+            stripPrefix: false
+            sensitiveHeaders:
 
 server:
   port: 4000
