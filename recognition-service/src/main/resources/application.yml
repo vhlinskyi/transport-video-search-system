@@ -1,0 +1,4 @@
+alpr:
+  country: eu
+  config: /etc/openalpr/openalpr.conf
+  runtime: /usr/share/openalpr/runtime_data
