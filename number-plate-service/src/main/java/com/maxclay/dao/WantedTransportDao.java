@@ -1,17 +1,10 @@
 package com.maxclay.dao;
 
 import com.maxclay.model.WantedTransport;
-
-import java.util.List;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * @author Vlad Glinskiy
  */
-public interface WantedTransportDao {
-
-    WantedTransport findOne(String id, String collection);
-
-    List<WantedTransport> findByNumberPlate(String numberPlate, String collection);
-
-    void save(WantedTransport wantedTransport, String collection);
+public interface WantedTransportDao extends MongoRepository<WantedTransport, String>, WantedTransportOperations {
 }

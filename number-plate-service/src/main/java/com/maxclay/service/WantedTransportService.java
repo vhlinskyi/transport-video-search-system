@@ -1,5 +1,6 @@
 package com.maxclay.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.maxclay.model.DataSetVersion;
 import com.maxclay.model.WantedTransport;
 
@@ -18,7 +19,12 @@ public interface WantedTransportService {
 
     void save(WantedTransport wantedTransport);
 
+    // lets return list, because we don't confident about number plate uniqueness...
+    List<WantedTransport> findByNumberPlate(String numberPlate);
+
     List<WantedTransport> findByNumberPlate(String numberPlate, DataSetVersion dataSetVersion);
 
-    List<WantedTransport> findByNumberPlate(String numberPlate);
+    void processRemoteData(JsonNode mvsData, DataSetVersion dataSetVersion);
+
+    DataSetVersion findLatestDataSetVersion();
 }

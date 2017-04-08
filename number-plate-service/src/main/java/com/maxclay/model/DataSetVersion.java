@@ -28,6 +28,14 @@ public class DataSetVersion {
     @Field("revision_id")
     private Long revisionId;
 
+    public DataSetVersion(Long revisionId, Date created) {
+        setRevisionId(revisionId);
+        setCreated(created);
+    }
+
+    public DataSetVersion() {
+    }
+
     public String getId() {
         return id;
     }

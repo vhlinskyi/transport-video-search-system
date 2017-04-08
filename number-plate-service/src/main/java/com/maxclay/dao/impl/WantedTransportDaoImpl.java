@@ -1,6 +1,6 @@
 package com.maxclay.dao.impl;
 
-import com.maxclay.dao.WantedTransportDao;
+import com.maxclay.dao.WantedTransportOperations;
 import com.maxclay.model.WantedTransport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,29 +12,33 @@ import java.util.List;
 /**
  * @author Vlad Glinskiy
  */
-public class WantedTransportDaoImpl implements WantedTransportDao {
+public class WantedTransportDaoImpl implements WantedTransportOperations {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Override
-    public WantedTransport findOne(String id, String collection) {
-        return mongoTemplate.findOne(Query.query(Criteria.where("id").is(id)), WantedTransport.class, collection);
+    public List<WantedTransport> findByNumberPlate(String numberPlate) {
+        return findByNumberPlate(numberPlate, true);
     }
 
     @Override
-    public List<WantedTransport> findByNumberPlate(String numberPlate, String collection) {
-        return mongoTemplate.find(Query.query(Criteria.where("number_plate").is(numberPlate)),
-                WantedTransport.class, collection);
-    }
+    public List<WantedTransport> findByNumberPlate(String numberPlate, boolean excludeFoundByMVS) {
+        Query query = new Query();
+        Criteria criteria = Criteria.where("number_plate").is(numberPlate);
 
-
-    @Override
-    public void save(WantedTransport wantedTransport, String collection) {
-        if (!mongoTemplate.collectionExists(collection)) {
-            mongoTemplate.createCollection(collection);
+        if (excludeFoundByMVS) {
+            criteria.andOperator(
+                    Criteria.where("removed_at_version_id").exists(false)
+            );
         }
-        mongoTemplate.save(wantedTransport, collection);
+        query.addCriteria(criteria);
+        return mongoTemplate.find(query, WantedTransport.class);
     }
 
+    @Override
+    public List<WantedTransport> findNotFoundByMvs() {
+        Query query = new Query().addCriteria(Criteria.where("removed_at_version_id").exists(false));
+        return mongoTemplate.find(query, WantedTransport.class);
+    }
 }

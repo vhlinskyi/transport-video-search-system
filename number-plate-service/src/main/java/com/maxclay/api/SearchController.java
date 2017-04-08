@@ -3,7 +3,7 @@ package com.maxclay.api;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.maxclay.exception.ValidationException;
 import com.maxclay.model.PlateSearchRequest;
-import com.maxclay.model.PlateSearchResult;
+import com.maxclay.model.WantedTransport;
 import com.maxclay.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,7 +45,7 @@ public class SearchController {
         }
 
         List<PlateSearchRequest> searchRequest = conversionService.convert(searchRequestData, List.class);
-        List<PlateSearchResult> result = searchService.search(searchRequest);
+        List<WantedTransport> result = searchService.search(searchRequest);
         return ResponseEntity.ok(result);
     }
 

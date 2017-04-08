@@ -1,7 +1,7 @@
 package com.maxclay.service;
 
 import com.maxclay.model.PlateSearchRequest;
-import com.maxclay.model.PlateSearchResult;
+import com.maxclay.model.WantedTransport;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface SearchService {
 
-    List<PlateSearchResult> search(List<PlateSearchRequest> searchRequest);
+    List<WantedTransport> search(List<PlateSearchRequest> searchRequest);
 }

@@ -1,20 +1,30 @@
 package com.maxclay.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.maxclay.dao.DataSetVersionDao;
 import com.maxclay.dao.WantedTransportDao;
 import com.maxclay.model.DataSetVersion;
 import com.maxclay.model.WantedTransport;
 import com.maxclay.service.WantedTransportService;
+import com.maxclay.utils.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vlad Glinskiy
  */
 @Service
 public class WantedTransportServiceImpl implements WantedTransportService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final WantedTransportDao wantedTransportDao;
     private final DataSetVersionDao dataSetVersionDao;
@@ -37,7 +47,7 @@ public class WantedTransportServiceImpl implements WantedTransportService {
             throw new IllegalArgumentException("Data set version does not exist");
         }
 
-        return wantedTransportDao.findOne(id, WantedTransport.GENERIC_COLLECTION_NAME + dataSetId);
+        return wantedTransportDao.findOne(id);
     }
 
     @Override
@@ -61,8 +71,8 @@ public class WantedTransportServiceImpl implements WantedTransportService {
         if (dataSetId == null || dataSetId.isEmpty() || !dataSetVersionDao.exists(dataSetId)) {
             throw new IllegalArgumentException("Data set version does not exist");
         }
-
-        wantedTransportDao.save(wantedTransport, WantedTransport.GENERIC_COLLECTION_NAME + dataSetId);
+        wantedTransport.setDataSetVersionId(dataSetId);
+        wantedTransportDao.save(wantedTransport);
     }
 
     @Override
@@ -87,7 +97,7 @@ public class WantedTransportServiceImpl implements WantedTransportService {
             throw new IllegalArgumentException("Data set version does not exist");
         }
 
-        return wantedTransportDao.findByNumberPlate(numberPlate, WantedTransport.GENERIC_COLLECTION_NAME + dataSetId);
+        return wantedTransportDao.findByNumberPlate(numberPlate);
     }
 
     @Override
@@ -98,5 +108,66 @@ public class WantedTransportServiceImpl implements WantedTransportService {
         }
 
         return findByNumberPlate(numberPlate, latest);
+    }
+
+    @Override
+    public void processRemoteData(JsonNode mvsData, DataSetVersion dataSetVersion) {
+        logger.info("Processing new MVS data. Data set version: {}", dataSetVersion);
+        dataSetVersionDao.save(dataSetVersion);
+        logger.info("Saved data set version '{}'", dataSetVersion);
+
+        Map<Long, WantedTransport> wantedTransportMap = wantedTransportDataToMap(mvsData);
+        wantedTransportDao.findNotFoundByMvs().stream().forEach(wanted -> {
+
+            // Wanted transport is absent in new MVS data set. Assume it is found.
+            if (!wantedTransportMap.containsKey(wanted.getMvsId())) {
+                wanted.setRemovedAtVersionId(dataSetVersion.getId());
+                save(wanted);
+            } else {
+                wantedTransportMap.remove(wanted.getMvsId());
+            }
+        });
+
+        // Currently in map left only new wanted transport, that should be saved to DB.
+        wantedTransportMap.values().stream().forEach(this::save);
+        logger.info("Successfully finished processing new MVS data. Data set version: {}", dataSetVersion);
+    }
+
+    @Override
+    public DataSetVersion findLatestDataSetVersion() {
+        return dataSetVersionDao.findLatest();
+    }
+
+    private Map<Long, WantedTransport> wantedTransportDataToMap(JsonNode wantedTransportData) {
+
+        Map<Long, WantedTransport> wantedTransportMap = new HashMap<>();
+        for (JsonNode transportDataJson : wantedTransportData) {
+            WantedTransport wantedTransport = wantedTransportFromJsonData(transportDataJson);
+            wantedTransportMap.put(wantedTransport.getMvsId(), wantedTransport);
+        }
+
+        return wantedTransportMap;
+    }
+
+    private WantedTransport wantedTransportFromJsonData(JsonNode wantedTransportData) {
+
+        WantedTransport wantedTransport = new WantedTransport();
+        wantedTransport.setChassisNumber(wantedTransportData.get("NSH").asText());
+        wantedTransport.setBodyNumber(wantedTransportData.get("NKU").asText());
+        wantedTransport.setNumberPlate(wantedTransportData.get("NOM").asText().replaceAll("\\s", ""));
+        wantedTransport.setModel(wantedTransportData.get("MDL").asText());
+        wantedTransport.setColor(wantedTransportData.get("COLOR").asText());
+
+        try {
+            Date registeredAsWanted = DateUtils.valueOf(wantedTransportData.get("dvv").asText(), "dd.MM.yyyy");
+            wantedTransport.setRegisteredAsWanted(registeredAsWanted);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        wantedTransport.setMvsId(wantedTransportData.get("ID").asLong());
+        wantedTransport.setDepartment(wantedTransportData.get("OVD").asText());
+
+        return wantedTransport;
     }
 }
