@@ -8,7 +8,7 @@ security:
       scope: server
 
 mongodb:
-  host: account-mongodb
+  host: common-mongodb
   username: user
   password: ${MONGODB_PASSWORD}
   database: transport_video_search_system

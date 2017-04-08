@@ -80,13 +80,23 @@ services:
         max-size: "10m"
         max-file: "10"
 
-  account-mongodb:
-    environment:
-      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
-    image: maxclay/transport-video-search-system-mongodb
-    restart: always
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-        
+  number-plate-service:
+      environment:
+        CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+        MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      image: maxclay/transport-video-search-system-number-plate-service
+      restart: always
+      logging:
+        options:
+          max-size: "10m"
+          max-file: "10"
+
+  common-mongodb:
+      environment:
+        MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      image: maxclay/transport-video-search-system-mongodb
+      restart: always
+      logging:
+        options:
+          max-size: "10m"
+          max-file: "10"

@@ -1,0 +1,10 @@
+mongodb:
+  host: common-mongodb
+  username: user
+  password: ${MONGODB_PASSWORD}
+  database: transport_video_search_system
+  port: 27017
+
+server:
+  context-path: /number-plate-service
+  port: 8000

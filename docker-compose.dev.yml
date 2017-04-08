@@ -31,7 +31,12 @@ services:
     ports:
       - "7000:7000"
 
-  account-mongodb:
+  number-plate-service:
+      build: number-plate-service
+      ports:
+        - 8000:8000
+
+  common-mongodb:
     build: mongodb
     ports:
       - 26000:27017

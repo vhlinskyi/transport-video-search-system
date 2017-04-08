@@ -1,6 +1,0 @@
-mongodb:
-  host: localhost
-  username:
-  password:
-  database: transport_video_search_system
-  port: 27017

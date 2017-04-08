@@ -32,6 +32,10 @@ zuul:
             serviceId: recognition-service
             stripPrefix: false
             sensitiveHeaders:
-
+    number-plate-service:
+                path: /number-plate-service/**
+                serviceId: number-plate-service
+                stripPrefix: false[]
+                sensitiveHeaders:
 server:
   port: 4000
