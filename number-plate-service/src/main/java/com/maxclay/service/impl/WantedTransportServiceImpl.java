@@ -77,12 +77,17 @@ public class WantedTransportServiceImpl implements WantedTransportService {
 
     @Override
     public void save(WantedTransport wantedTransport) {
-        DataSetVersion latest = dataSetVersionDao.findLatest();
-        if (latest == null) {
+
+        String transportVersionId = wantedTransport.getDataSetVersionId();
+        DataSetVersion dataSetVersion = (transportVersionId != null && !transportVersionId.isEmpty())
+                ? dataSetVersionDao.findOne(transportVersionId)
+                : dataSetVersionDao.findLatest();
+
+        if (dataSetVersion == null) {
             throw new IllegalStateException("There is no data set version");
         }
 
-        save(wantedTransport, latest);
+        save(wantedTransport, dataSetVersion);
     }
 
     @Override
