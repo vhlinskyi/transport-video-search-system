@@ -1,7 +1,6 @@
 package com.maxclay.controller;
 
-import com.maxclay.model.RecognitionResult;
-import com.maxclay.service.RecognitionService;
+import com.maxclay.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class MessageHandler extends AbstractWebSocketHandler {
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
     @Autowired
-    private RecognitionService recognitionService;
+    private SearchService searchService;
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -31,16 +30,12 @@ public class MessageHandler extends AbstractWebSocketHandler {
     @Override
     public void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws IOException {
 
-        if(message.getPayload() == null || message.getPayload().array().length == 0) {
+        if (message.getPayload() == null || message.getPayload().array().length == 0) {
             return;
         }
 
-        RecognitionResult recognitionResult = recognitionService.recognize(message.getPayload().array());
-        if(recognitionResult.isEmpty())  {
-            return;
-        }
-
-        logger.info("Recognized: {}", recognitionResult);
+        // TODO return type. Send result via WebSockets
+        searchService.recognizeAndSearch(message.getPayload().array());
     }
 
     @Override

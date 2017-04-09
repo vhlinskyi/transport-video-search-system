@@ -7,6 +7,8 @@ import com.openalpr.jni.Alpr;
 import com.openalpr.jni.AlprPlate;
 import com.openalpr.jni.AlprPlateResult;
 import com.openalpr.jni.AlprResults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class RecognitionServiceImpl implements RecognitionService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Alpr alpr;
 
@@ -31,8 +35,8 @@ public class RecognitionServiceImpl implements RecognitionService {
     @Override
     public RecognitionResult recognize(byte[] imageData) {
 
-        if(imageData == null || imageData.length == 0) {
-            throw new IllegalArgumentException("Image data can not ve empty");
+        if (imageData == null || imageData.length == 0) {
+            throw new IllegalArgumentException("Image data can not be empty");
         }
 
         RecognitionResult recognitionResult = new RecognitionResult();
@@ -43,6 +47,7 @@ public class RecognitionServiceImpl implements RecognitionService {
             }
         }
 
+        logger.info("Recognized: {}", recognitionResult);
         return recognitionResult;
     }
 }
