@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author Vlad Glinskiy
  */
 @Controller
-public class HomeController {
+public class ProfileController {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    static String landingPage() {
-        return "index";
+    // TODO change to modal
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    static String profilePage() {
+        return "profile";
     }
+
 }
