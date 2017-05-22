@@ -1,34 +1,35 @@
 <!DOCTYPE html>
-<html
->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity3">
 <head>
     <title>Transport Video Search System</title>
     <!-- Bootstrap Core CSS -->
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"></link>
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet"></link>
 
     <!-- MetisMenu CSS -->
-    <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet"></link>
+    <link th:href="@{/vendor/metisMenu/metisMenu.min.css}" rel="stylesheet"></link>
 
     <!-- DataTables CSS -->
-    <link href="/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet"></link>
+    <link th:href="@{/vendor/datatables-plugins/dataTables.bootstrap.css}" rel="stylesheet"></link>
 
     <!-- DataTables Responsive CSS -->
-    <link href="/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"></link>
+    <link th:href="@{/vendor/datatables-responsive/dataTables.responsive.css}" rel="stylesheet"></link>
 
     <!-- Custom CSS -->
-    <link href="/css/style.css" rel="stylesheet"></link>
+    <link th:href="@{/css/style.css}" rel="stylesheet"></link>
 
     <!-- Custom Fonts -->
-    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"></link>
+    <link th:href="@{/vendor/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css"></link>
 
-    <link rel="stylesheet" href="/vendor/cal-heatmap/cal-heatmap.css"></link>
+    <link rel="stylesheet" th:href="@{/vendor/cal-heatmap/cal-heatmap.css}"></link>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script th:src="@{https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js}"></script>
+    <script th:src="@{https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js}"></script>
     <![endif]-->
 </head>
 
@@ -67,7 +68,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a class="text-center" href="#">
+                        <a class="text-center" th:href="@{/tasks}">
                             <strong>See All Tasks</strong>
                             <i class="fa fa-angle-right"></i>
                         </a>
@@ -90,7 +91,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a class="text-center" href="/alerts">
+                        <a class="text-center" th:href="@{/alerts}">
                             <strong>See All Alerts</strong>
                             <i class="fa fa-angle-right"></i>
                         </a>
@@ -104,12 +105,12 @@
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="/profile"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                    <li><a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
-                    <li><a href="/settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                    <li><a th:href="@{/settings}"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                     <li class="divider"></li>
-                    <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -133,16 +134,16 @@
                         <!-- /input-group -->
                     </li>
                     <li class="active">
-                        <a href="/profile"><i class="fa fa-user fa-fw"></i> Profile</a>
+                        <a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> Profile</a>
                     </li>
                     <li>
-                        <a href="/tasks"><i class="fa fa-tasks fa-fw"></i> Tasks</a>
+                        <a th:href="@{/tasks}"><i class="fa fa-tasks fa-fw"></i> Tasks</a>
                     </li>
                     <li>
-                        <a href="/alerts"><i class="fa fa-bell fa-fw"></i> Alerts</a>
+                        <a th:href="@{/alerts}"><i class="fa fa-bell fa-fw"></i> Alerts</a>
                     </li>
                     <li>
-                        <a href="/settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <a th:href="@{/settings}"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                 </ul>
             </div>
@@ -373,30 +374,30 @@
 <!-- /#wrapper -->
 
 <!-- jQuery -->
-<script src="/vendor/jquery/jquery.min.js"></script>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
 
 <!-- Metis Menu Plugin JavaScript -->
-<script src="/vendor/metisMenu/metisMenu.min.js"></script>
+<script th:src="@{/vendor/metisMenu/metisMenu.min.js}"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/script.js"></script>
+<script th:src="@{/js/script.js}"></script>
 
 <!-- d3.js library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js}" charset="utf-8"></script>
 
 <!-- Cal-HeatMap JavaScript -->
-<script type="text/javascript" src="/vendor/cal-heatmap/cal-heatmap.min.js"></script>
+<script type="text/javascript" th:src="@{/vendor/cal-heatmap/cal-heatmap.min.js}"></script>
 
 <!-- Heat Map JavaScript -->
-<script src="/js/heatmap.js"></script>
+<script th:src="@{/js/heatmap.js}"></script>
 
 <!-- DataTables JavaScript -->
-<script src="/vendor/datatables/js/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-<script src="/vendor/datatables-responsive/dataTables.responsive.js"></script>
+<script th:src="@{/vendor/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendor/datatables-plugins/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/vendor/datatables-responsive/dataTables.responsive.js}"></script>
 
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>

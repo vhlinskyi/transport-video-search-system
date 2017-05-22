@@ -16,6 +16,7 @@
 		<module>account-service</module>
 		<module>recognition-service</module>
 		<module>number-plate-service</module>
+		<module>web-ui-service</module>
 	</modules>
 
 </project>

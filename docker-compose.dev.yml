@@ -26,15 +26,20 @@ services:
     ports:
       - 6000:6000
 
-  recognition-service:
-    build: recognition-service
-    ports:
-      - "7000:7000"
+#  recognition-service:
+#    build: recognition-service
+#    ports:
+#      - "7000:7000"
+#
+#  number-plate-service:
+#      build: number-plate-service
+#      ports:
+#        - 8000:8000
 
-  number-plate-service:
-      build: number-plate-service
+  web-ui-service:
+      build: web-ui-service
       ports:
-        - 8000:8000
+        - 9000:9000
 
   common-mongodb:
     build: mongodb
