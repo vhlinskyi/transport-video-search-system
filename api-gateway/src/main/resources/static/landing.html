@@ -53,7 +53,10 @@
                 <li>
                     <a class="page-scroll" href="#contact">Contact</a>
                 </li>
-                <li>
+                <li sec:authorize="isAuthenticated()">
+                    <a class="page-scroll" th:href="@{/profile}">Profile</a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_ANONYMOUS')">
                     <a class="page-scroll" th:href="@{/login}">Login</a>
                 </li>
             </ul>

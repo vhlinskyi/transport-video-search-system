@@ -37,10 +37,6 @@ zuul:
 #                serviceId: number-plate-service
 #                stripPrefix: false
 #                sensitiveHeaders:
-    web-ui-service:
-                path: /web-ui-service/**
-                serviceId: web-ui-service
-                stripPrefix: false
-                sensitiveHeaders:
+
 server:
   port: 4000

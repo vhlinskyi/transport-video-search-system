@@ -1,22 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.maxclay</groupId>
-	<artifactId>transport-video-search-system</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>transport-video-search-system</name>
+    <groupId>com.maxclay</groupId>
+    <artifactId>transport-video-search-system</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>transport-video-search-system</name>
 
-	<modules>
-		<module>config-service</module>
-		<module>registry</module>
-		<module>api-gateway</module>
-		<module>auth-service</module>
-		<module>account-service</module>
-		<module>recognition-service</module>
-		<module>number-plate-service</module>
-		<module>web-ui-service</module>
-	</modules>
+    <modules>
+        <module>config-service</module>
+        <module>registry</module>
+        <module>api-gateway</module>
+        <module>auth-service</module>
+        <module>account-service</module>
+        <module>recognition-service</module>
+        <module>number-plate-service</module>
+    </modules>
 
 </project>

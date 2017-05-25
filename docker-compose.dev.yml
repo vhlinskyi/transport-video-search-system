@@ -36,11 +36,6 @@ services:
 #      ports:
 #        - 8000:8000
 
-  web-ui-service:
-      build: web-ui-service
-      ports:
-        - 9000:9000
-
   common-mongodb:
     build: mongodb
     ports:
