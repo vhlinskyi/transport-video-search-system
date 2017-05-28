@@ -120,7 +120,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Username</h1>
+                    <h1 *ngIf="profile" class="page-header">{{profile.name}}</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -144,7 +144,7 @@
                             <div class="col-lg-9">
                                 <div>
                                     <label >User name: </label>
-                                    <b>Username</b>
+                                    <b *ngIf="profile">{{profile.name}}</b>
                                 </div>
                                 <div>
                                     <label >Phone: </label>
@@ -156,7 +156,7 @@
                                 </div>
                                 <div>
                                     <label >Email: </label>
-                                    <b>email@example.com</b>
+                                    <b *ngIf="profile">{{profile.email}}</b>
                                 </div>
                             </div>
 
