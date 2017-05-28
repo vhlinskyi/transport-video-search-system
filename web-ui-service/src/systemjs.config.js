@@ -25,7 +25,13 @@
 
       // other libraries
       'rxjs':                      'npm:rxjs',
-      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      
+       // add mapping for ng2-pagination
+      'ng2-pagination': 'npm:ng2-pagination',
+
+      // add mapping for ng2-file-upload
+      'ng2-file-upload': 'npm:ng2-file-upload' 
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -38,6 +44,14 @@
         }
       },
       rxjs: {
+        defaultExtension: 'js'
+      },
+      'ng2-pagination': { //add configuration to load
+        main: './index.js',
+        defaultExtension: 'js'
+      },
+      'ng2-file-upload': {
+        main: './index.js',
         defaultExtension: 'js'
       }
     }
