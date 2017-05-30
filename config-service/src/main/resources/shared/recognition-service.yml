@@ -1,3 +1,14 @@
 server:
   context-path: /recognition-service
   port: 7000
+
+spring:
+  http:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 2048MB
+
+alpr:
+  country: eu
+  config: /etc/openalpr/openalpr.conf
+  runtime: /usr/share/openalpr/runtime_data

@@ -1,4 +1,4 @@
-FROM java:8-jre
+FROM maxclay/openalpr:latest
 MAINTAINER Vladislav Glinskiy <glinskiy56@gmail.com>
 
 ADD ./target/recognition-service.jar /app/

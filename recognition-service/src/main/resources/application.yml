@@ -1,7 +1,8 @@
+multipart:
+  max-file-size: 1024MB
+  max-request-size: 2048MB
+
 alpr:
   country: eu
   config: /etc/openalpr/openalpr.conf
   runtime: /usr/share/openalpr/runtime_data
-
-number-plate-service:
-  url: http://192.168.1.146:8080/

@@ -24,28 +24,29 @@ public class NumberPlateSearchServiceImpl implements NumberPlateSearchService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private Environment environment;
+//    @Autowired
+//    private Environment environment;
 
     @Override
     @SuppressWarnings("unchecked")
     public List<WantedTransport> search(List<PlateSearchRequest> searchRequest) {
-        String numberPlateServiceUrl = environment.getProperty("number-plate-service.url");
+//        String numberPlateServiceUrl = environment.getProperty("number-plate-service.url");
+        String numberPlateServiceUrl = "http://dummy-url.com";
         logger.info("Sending request '{}' to the number plate service at '{}'", searchRequest, numberPlateServiceUrl);
-        RestTemplate restTemplate = new RestTemplate();
-
-        JsonNode response = restTemplate.postForObject(numberPlateServiceUrl, searchRequest, JsonNode.class);
-        logger.info("Response received from the number plate service: '{}'", response);
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        JsonNode response = restTemplate.postForObject(numberPlateServiceUrl, searchRequest, JsonNode.class);
+//        logger.info("Response received from the number plate service: '{}'", response);
 
         List<WantedTransport> result = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-        for (JsonNode transportData : response) {
-            try {
-                result.add(mapper.treeToValue(transportData, WantedTransport.class));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
+//        ObjectMapper mapper = new ObjectMapper();
+//        for (JsonNode transportData : response) {
+//            try {
+//                result.add(mapper.treeToValue(transportData, WantedTransport.class));
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         return result;
     }

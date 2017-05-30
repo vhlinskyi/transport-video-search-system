@@ -11,27 +11,27 @@ services:
   api-gateway:
     build: api-gateway
 
-  auth-service:
-    build: auth-service
-    ports:
-      - 5000:5000
-
-  auth-mongodb:
-    build: mongodb
-    ports:
-      - 25000:27017
-
-  account-service:
-    build: account-service
-    ports:
-      - 6000:6000
+#  auth-service:
+#    build: auth-service
+#    ports:
+#      - 5000:5000
+#
+#  auth-mongodb:
+#    build: mongodb
+#    ports:
+#      - 25000:27017
+#
+#  account-service:
+#    build: account-service
+#    ports:
+#      - 6000:6000
 
   recognition-service:
     build: recognition-service
     ports:
       - "7000:7000"
-
-  account-mongodb:
-    build: mongodb
-    ports:
-      - 26000:27017
+#
+#  account-mongodb:
+#    build: mongodb
+#    ports:
+#      - 26000:27017

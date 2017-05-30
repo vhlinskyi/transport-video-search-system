@@ -34,41 +34,41 @@ services:
         max-size: "10m"
         max-file: "10"
 
-  auth-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      NOTIFICATION_SERVICE_PASSWORD: ${NOTIFICATION_SERVICE_PASSWORD}
-      STATISTICS_SERVICE_PASSWORD: ${STATISTICS_SERVICE_PASSWORD}
-      ACCOUNT_SERVICE_PASSWORD: ${ACCOUNT_SERVICE_PASSWORD}
-      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
-    image: maxclay/transport-video-search-system-auth-service
-    restart: always
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  auth-mongodb:
-    environment:
-      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
-    image: maxclay/transport-video-search-system-mongodb
-    restart: always
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  account-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      ACCOUNT_SERVICE_PASSWORD: ${ACCOUNT_SERVICE_PASSWORD}
-      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
-    image: maxclay/transport-video-search-system-account-service
-    restart: always
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
+#  auth-service:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+#      NOTIFICATION_SERVICE_PASSWORD: ${NOTIFICATION_SERVICE_PASSWORD}
+#      STATISTICS_SERVICE_PASSWORD: ${STATISTICS_SERVICE_PASSWORD}
+#      ACCOUNT_SERVICE_PASSWORD: ${ACCOUNT_SERVICE_PASSWORD}
+#      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+#    image: maxclay/transport-video-search-system-auth-service
+#    restart: always
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
+#
+#  auth-mongodb:
+#    environment:
+#      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+#    image: maxclay/transport-video-search-system-mongodb
+#    restart: always
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
+#
+#  account-service:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+#      ACCOUNT_SERVICE_PASSWORD: ${ACCOUNT_SERVICE_PASSWORD}
+#      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+#    image: maxclay/transport-video-search-system-account-service
+#    restart: always
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
 
   recognition-service:
     environment:
@@ -80,13 +80,13 @@ services:
         max-size: "10m"
         max-file: "10"
 
-  account-mongodb:
-    environment:
-      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
-    image: maxclay/transport-video-search-system-mongodb
-    restart: always
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
+#  account-mongodb:
+#    environment:
+#      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+#    image: maxclay/transport-video-search-system-mongodb
+#    restart: always
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
         
