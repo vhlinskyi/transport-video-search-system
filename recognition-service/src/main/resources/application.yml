@@ -6,3 +6,13 @@ alpr:
   country: eu
   config: /etc/openalpr/openalpr.conf
   runtime: /usr/share/openalpr/runtime_data
+
+
+upload:
+  task:
+    uploadPath: file:./task-files
+
+mongodb:
+  host: localhost
+  port: 27017
+  database: test

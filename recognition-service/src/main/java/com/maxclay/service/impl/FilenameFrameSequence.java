@@ -19,21 +19,36 @@ import java.io.IOException;
  */
 public class FilenameFrameSequence implements VideoFrameSequence {
 
+
+    public static final int DEFAULT_STEP_IN_SECONDS = 3;
+
+    private static final int MICROSECONDS_IN_SECOND = 1_000_000;
     private final static Logger log = LoggerFactory.getLogger(FilenameFrameSequence.class);
 
     private IContainer container;
     private IStreamCoder videoCoder;
     private int videoStreamId;
 
+    private int stepInSeconds;
     private boolean hasNext;
     private IPacket currentPacket;
+    private IVideoPicture currentPicture;
 
     public FilenameFrameSequence(String absoluteFilePath) {
+        this(absoluteFilePath, DEFAULT_STEP_IN_SECONDS);
+    }
+
+    public FilenameFrameSequence(String absoluteFilePath, int stepInSeconds) {
 
         if (absoluteFilePath == null || absoluteFilePath.isEmpty()) {
             throw new IllegalArgumentException("File path can not be empty");
         }
 
+        if (stepInSeconds < 0) {
+            throw new IllegalArgumentException("Step must be greater than zero");
+        }
+
+        this.stepInSeconds = stepInSeconds;
         container = IContainer.make();
         if (container.open(absoluteFilePath, IContainer.Type.READ, null) < 0) {
             throw new IllegalArgumentException("Could not open file: " + absoluteFilePath);
@@ -69,7 +84,10 @@ public class FilenameFrameSequence implements VideoFrameSequence {
             throw new IllegalStateException("No frames left");
         }
 
-        BufferedImage frame = decodeCurrent();
+        System.out.println();
+        System.out.println("ON NEXT TIMESTAMP: " + currentPicture.getTimeStamp());
+        System.out.println();
+        BufferedImage frame = Utils.videoPictureToImage(currentPicture);
         readAndCheckForNextPacket();
 
         // TODO convert only necessary pictures
@@ -85,8 +103,18 @@ public class FilenameFrameSequence implements VideoFrameSequence {
                 continue;
             }
 
-            this.hasNext = true;
-            break;
+            IVideoPicture decoded = decodePacket(currentPacket);
+            if (decoded == null) {
+                continue;
+            }
+
+            if (currentPicture == null ||
+                    decoded.getTimeStamp() - currentPicture.getTimeStamp() > stepInSeconds * MICROSECONDS_IN_SECOND) {
+
+                this.currentPicture = decoded;
+                this.hasNext = true;
+                break;
+            }
         }
 
         if (!this.hasNext) {
@@ -94,26 +122,22 @@ public class FilenameFrameSequence implements VideoFrameSequence {
         }
     }
 
-    private BufferedImage decodeCurrent() {
+    private IVideoPicture decodePacket(IPacket packet) {
 
         IVideoPicture picture = IVideoPicture.make(videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
 
         int offset = 0;
-        while (offset < currentPacket.getSize() && !picture.isComplete()) {
+        while (offset < packet.getSize() && !picture.isComplete()) {
 
-            int bytesDecoded = videoCoder.decodeVideo(picture, currentPacket, offset);
+            int bytesDecoded = videoCoder.decodeVideo(picture, packet, offset);
             offset += bytesDecoded;
 
             if (!picture.isComplete()) {
                 continue;
             }
 
-//            long timestamp = picture.getTimeStamp();
-//            System.out.println("TIMESTAMP: " + timestamp);
-
-            // TODO convert only necessary pictures
-            return Utils.videoPictureToImage(picture);
-        }
+            return picture;
+        }//TODO refactor
 
         return null;
     }

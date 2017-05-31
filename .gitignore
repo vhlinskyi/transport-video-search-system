@@ -26,3 +26,7 @@ nbdist/
 # Images
 *.png
 *.jpeg
+*.jpg
+
+# Videos
+*.mp4
