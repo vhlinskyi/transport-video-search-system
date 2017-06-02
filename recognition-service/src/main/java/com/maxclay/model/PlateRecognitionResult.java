@@ -1,5 +1,6 @@
 package com.maxclay.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
@@ -7,7 +8,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 public final class PlateRecognitionResult {
 
+    @JsonProperty("plate_number")
     private final String plateNumber;
+
+    @JsonProperty("overall_confidence")
     private final float overallConfidence;
 
     public PlateRecognitionResult(String plateNumber, float overallConfidence) {

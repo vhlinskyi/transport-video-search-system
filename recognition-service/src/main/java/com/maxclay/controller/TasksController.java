@@ -1,6 +1,7 @@
 package com.maxclay.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.Lists;
 import com.maxclay.model.Task;
 import com.maxclay.service.TaskService;
 import org.slf4j.Logger;
@@ -37,6 +38,12 @@ public class TasksController {
         return ResponseEntity.ok(created);
     }
 
+    // TODO create task only for authenticated users
+    @RequestMapping(value = "/tasks", method = RequestMethod.GET)
+    public ResponseEntity getAllTasks() {
+        return ResponseEntity.ok(Lists.reverse(taskService.getAll()));
+    }
+
     // TODO add files only for authenticated users
     @RequestMapping(value = "/tasks/{taskId}", method = RequestMethod.POST)
     public ResponseEntity uploadFile(@PathVariable String taskId, MultipartFile file) throws IOException {
@@ -50,9 +57,9 @@ public class TasksController {
     @RequestMapping(value = "/tasks/{taskId}/process", method = RequestMethod.POST)
     public ResponseEntity processTask(@PathVariable String taskId) {
 
-        taskService.process(taskId);
-        log.info("Processing task with id = '{}'", taskId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        Task task = taskService.process(taskId);
+        log.info("Processing task '{}'", task);
+        return ResponseEntity.ok(task);
     }
 
 }

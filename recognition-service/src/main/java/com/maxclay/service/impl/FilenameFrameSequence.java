@@ -19,9 +19,6 @@ import java.io.IOException;
  */
 public class FilenameFrameSequence implements VideoFrameSequence {
 
-
-    public static final int DEFAULT_STEP_IN_SECONDS = 3;
-
     private static final int MICROSECONDS_IN_SECOND = 1_000_000;
     private final static Logger log = LoggerFactory.getLogger(FilenameFrameSequence.class);
 
@@ -33,10 +30,6 @@ public class FilenameFrameSequence implements VideoFrameSequence {
     private boolean hasNext;
     private IPacket currentPacket;
     private IVideoPicture currentPicture;
-
-    public FilenameFrameSequence(String absoluteFilePath) {
-        this(absoluteFilePath, DEFAULT_STEP_IN_SECONDS);
-    }
 
     public FilenameFrameSequence(String absoluteFilePath, int stepInSeconds) {
 
@@ -84,9 +77,6 @@ public class FilenameFrameSequence implements VideoFrameSequence {
             throw new IllegalStateException("No frames left");
         }
 
-        System.out.println();
-        System.out.println("ON NEXT TIMESTAMP: " + currentPicture.getTimeStamp());
-        System.out.println();
         BufferedImage frame = Utils.videoPictureToImage(currentPicture);
         readAndCheckForNextPacket();
 

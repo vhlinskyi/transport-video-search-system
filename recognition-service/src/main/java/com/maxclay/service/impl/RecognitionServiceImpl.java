@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecognitionServiceImpl implements RecognitionService {
 
+    private static final int NUMBER_OF_RECOGNITION_RESULTS = 1;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Alpr alpr;
@@ -29,7 +31,7 @@ public class RecognitionServiceImpl implements RecognitionService {
                                   @Value("${alpr.runtime}") String runtimeData) {
 
         this.alpr = new Alpr(country, configFile, runtimeData);
-        this.alpr.setTopN(3);
+        this.alpr.setTopN(NUMBER_OF_RECOGNITION_RESULTS);
     }
 
     @Override
