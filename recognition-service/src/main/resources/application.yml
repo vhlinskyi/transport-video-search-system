@@ -8,9 +8,10 @@ alpr:
   runtime: /usr/share/openalpr/runtime_data
 
 
-upload:
-  task:
-    uploadPath: file:./task-files
+files:
+  upload:
+    tasksFilesPath: file:./task-files
+    suspiciousPicturesPath: file:./suspicious-matches
 
 mongodb:
   host: localhost

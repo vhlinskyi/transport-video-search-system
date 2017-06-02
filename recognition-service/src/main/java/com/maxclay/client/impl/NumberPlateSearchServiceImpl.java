@@ -1,53 +1,55 @@
 package com.maxclay.client.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxclay.client.NumberPlateSearchService;
 import com.maxclay.model.PlateSearchRequest;
 import com.maxclay.model.WantedTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
+ * TODO change if use with Number Plate Service
+ *
  * @author Vlad Glinskiy
  */
 @Service
 public class NumberPlateSearchServiceImpl implements NumberPlateSearchService {
 
+    public static final List<String> TEST_NUMBER_PLATES = Arrays.asList("AE1558AX", "AAO520KP");
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-//    @Autowired
-//    private Environment environment;
-
+    /**
+     * TODO SHOULD BE CHANGED. USED JUST FOR TESTING
+     *
+     * @param searchRequest
+     * @return
+     */
     @Override
     @SuppressWarnings("unchecked")
     public List<WantedTransport> search(List<PlateSearchRequest> searchRequest) {
-//        String numberPlateServiceUrl = environment.getProperty("number-plate-service.url");
-        String numberPlateServiceUrl = "http://dummy-url.com";
-        logger.info("Sending request '{}' to the number plate service at '{}'", searchRequest, numberPlateServiceUrl);
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        JsonNode response = restTemplate.postForObject(numberPlateServiceUrl, searchRequest, JsonNode.class);
-//        logger.info("Response received from the number plate service: '{}'", response);
 
-        List<WantedTransport> result = new ArrayList<>();
-//        ObjectMapper mapper = new ObjectMapper();
-//        for (JsonNode transportData : response) {
-//            try {
-//                result.add(mapper.treeToValue(transportData, WantedTransport.class));
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        PlateSearchRequest singleSearchRequest = searchRequest.get(0);
+        // added just for testing
+        boolean isFound = TEST_NUMBER_PLATES.contains(singleSearchRequest.getNumberPlate());
 
-        return result;
+        if (!isFound) {
+            return Collections.emptyList();
+        }
+
+        WantedTransport dummy = new WantedTransport();
+        dummy.setNumberPlate(singleSearchRequest.getNumberPlate());
+        dummy.setBodyNumber("dummy");
+        dummy.setChassisNumber("dummy");
+        dummy.setColor("dummy");
+        dummy.setModel("dummy");
+        dummy.setDepartment("dummy");
+        logger.info("FOUND SUSPICIOUS TRANSPORT: {}", dummy);
+
+        return Arrays.asList(dummy);
     }
 }

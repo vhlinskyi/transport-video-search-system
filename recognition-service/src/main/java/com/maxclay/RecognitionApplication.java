@@ -1,6 +1,6 @@
 package com.maxclay;
 
-import com.maxclay.config.TaskFilesUploadProperties;
+import com.maxclay.config.FilesUploadProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 //@EnableDiscoveryClient
 //@EnableConfigurationProperties
-@EnableConfigurationProperties({TaskFilesUploadProperties.class})
+@EnableConfigurationProperties({FilesUploadProperties.class})
 public class RecognitionApplication {
 
     public static void main(String[] args) {

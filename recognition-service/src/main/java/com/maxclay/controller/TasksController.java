@@ -38,6 +38,14 @@ public class TasksController {
         return ResponseEntity.ok(created);
     }
 
+    // TODO fetch task only for authenticated users
+    @RequestMapping(value = "/tasks/{taskId}", method = RequestMethod.GET)
+    public ResponseEntity getTask(@PathVariable String taskId) {
+
+        Task fetched = taskService.getById(taskId);
+        return ResponseEntity.ok(fetched);
+    }
+
     // TODO create task only for authenticated users
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
     public ResponseEntity getAllTasks() {
@@ -49,7 +57,7 @@ public class TasksController {
     public ResponseEntity uploadFile(@PathVariable String taskId, MultipartFile file) throws IOException {
 
         taskService.attachFileToTask(file, taskId);
-        log.info("File '{}' attached to the task with id = '{}'", file.getOriginalFilename(), taskId);
+        log.debug("File '{}' attached to the task with id = '{}'", file.getOriginalFilename(), taskId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

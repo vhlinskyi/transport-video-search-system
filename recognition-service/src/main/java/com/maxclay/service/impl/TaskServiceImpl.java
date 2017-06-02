@@ -1,11 +1,11 @@
 package com.maxclay.service.impl;
 
-import com.maxclay.config.TaskFilesUploadProperties;
+import com.maxclay.client.NumberPlateSearchService;
+import com.maxclay.config.FilesUploadProperties;
 import com.maxclay.controller.TasksWebSocketHandler;
 import com.maxclay.exception.ResourceNotFoundException;
 import com.maxclay.exception.ValidationException;
-import com.maxclay.model.RecognitionResult;
-import com.maxclay.model.Task;
+import com.maxclay.model.*;
 import com.maxclay.repository.TaskRepository;
 import com.maxclay.service.RecognitionService;
 import com.maxclay.service.TaskService;
@@ -20,48 +20,73 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * TODO review it. Too much logic concentrated here.
+ *
  * @author Vlad Glinskiy
  */
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    public static final int DEFAULT_FRAME_STEP_IN_SECONDS = 3;
+    public static final int DEFAULT_FRAME_STEP_IN_SECONDS = 1;
 
+    //FIXME
+    public static final String DEFAULT_IMAGE_EXTENSION = ".png";
+
+    // added just for testing. should be changed
     private static final int INDEX_OF_SINGLE_RECOGNITION_RESULT = 0;
+    private static final int INDEX_OF_SINGLE_WANTED_TRANSPORT = 0;
+
     private static final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
 
     private final TaskRepository taskRepository;
     private final Resource filesUploadDir;
+    private final Resource suspiciousPicturesDir;
     private final RecognitionService recognitionService;
     private final ExecutorService executorService;
     private final TasksWebSocketHandler tasksWebSocketHandler;
     private final VideoService videoService;
+    private final NumberPlateSearchService plateSearchService;
 
     @Autowired
     public TaskServiceImpl(TaskRepository taskRepository,
-                           TaskFilesUploadProperties taskFilesUploadProperties,
+                           FilesUploadProperties filesUploadProperties,
                            RecognitionService recognitionService,
                            TasksWebSocketHandler tasksWebSocketHandler,
-                           VideoService videoService) {
+                           VideoService videoService,
+                           NumberPlateSearchService plateSearchService) {
 
         this.taskRepository = taskRepository;
-        this.filesUploadDir = taskFilesUploadProperties.getUploadPath();
+        this.filesUploadDir = filesUploadProperties.getTasksFilesPath();
+        this.suspiciousPicturesDir = filesUploadProperties.getSuspiciousPicturesPath();
         this.recognitionService = recognitionService;
         this.executorService = Executors.newCachedThreadPool();
         this.tasksWebSocketHandler = tasksWebSocketHandler;
         this.videoService = videoService;
+        this.plateSearchService = plateSearchService;
     }
 
     @Override
     public Task createTask() {
         return taskRepository.save(new Task());
     }
+
+    @Override
+    public Task getById(String taskId) {
+
+        Task task = taskRepository.findOne(taskId);
+        if (task == null) {
+            throw new ResourceNotFoundException(String.format("Task with id = '%s' not found", taskId));
+        }
+
+        return task;
+    }
+
 
     @Override
     public List<Task> getAll() {
@@ -94,7 +119,7 @@ public class TaskServiceImpl implements TaskService {
         try (InputStream in = file.getInputStream(); OutputStream out = new FileOutputStream(tempFile)) {
             IOUtils.copy(in, out);
             String filePath = tempFile.getAbsolutePath();
-            log.info("File for task with id = '{}' persisted at '{}'", taskId, filePath);
+            log.debug("File for task with id = '{}' persisted at '{}'", taskId, filePath);
 
             if (isImage(file)) {
                 task.addImage(filePath);
@@ -137,27 +162,21 @@ public class TaskServiceImpl implements TaskService {
 
     private void processImages(Task task) {
 
-        task.getImages().stream()
-                .map(FileSystemResource::new)
-                .map(resource -> {
-                    byte[] imageData = null;
-                    try {
-                        imageData = org.apache.commons.io.IOUtils.toByteArray(resource.getInputStream());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        for (String imagePath : task.getImages()) {
 
-                    return imageData;
-                })
-                .filter(Objects::nonNull)
-                .forEach(imageData -> {
-                    RecognitionResult result = recognitionService.recognize(imageData);
-                    task.incrementProcessed();
-                    if (!result.isEmpty()) {
-                        task.addRecognized(result.getPlateResults().get(INDEX_OF_SINGLE_RECOGNITION_RESULT));
-                    }
-                    tasksWebSocketHandler.sendTask(task);
-                });
+            byte[] imageData = null;
+            try {
+                imageData = org.apache.commons.io.IOUtils.toByteArray(new FileSystemResource(imagePath).getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (imageData == null) {
+                continue;
+            }
+
+            processBinaryImageData(task, imageData, getFileExtension(imagePath));
+        }
     }
 
     private void processVideos(Task task) {
@@ -165,19 +184,50 @@ public class TaskServiceImpl implements TaskService {
                 .map(videoPath -> videoService.getSequence(videoPath, DEFAULT_FRAME_STEP_IN_SECONDS))
                 .forEach(frameSequence -> {
                     while (frameSequence.hasNext()) {
-                        byte[] imageData = frameSequence.getNext();
-                        RecognitionResult result = null;
-                        if (imageData != null) {
-                            result = recognitionService.recognize(imageData);
-                        }
-
-                        task.incrementProcessed();
-                        if (result != null && !result.isEmpty()) {
-                            task.addRecognized(result.getPlateResults().get(INDEX_OF_SINGLE_RECOGNITION_RESULT));
-                        }
-                        tasksWebSocketHandler.sendTask(task);
+                        processBinaryImageData(task, frameSequence.getNext(), DEFAULT_IMAGE_EXTENSION);
                     }
                 });
+    }
+
+    private void processBinaryImageData(Task task, byte[] imageData, String extension) {
+        RecognitionResult result = null;
+        if (imageData != null) {
+            result = recognitionService.recognize(imageData);
+        }
+
+        task.incrementProcessed();
+        if (result != null && !result.isEmpty()) {
+            PlateRecognitionResult recognitionResult = result.getPlateResults().get(INDEX_OF_SINGLE_RECOGNITION_RESULT);
+            if (task.addRecognized(recognitionResult)) {
+                // TODO change it to search multiple plates at once. added just for testing.
+                PlateSearchRequest searchRequest = new PlateSearchRequest(recognitionResult.getPlateNumber());
+                List<WantedTransport> searchResult = plateSearchService.search(Arrays.asList(searchRequest));
+                if (!searchResult.isEmpty()) {
+                    WantedTransport wantedTransport = searchResult.get(INDEX_OF_SINGLE_WANTED_TRANSPORT);
+                    String imagePath = saveBinaryImageData(imageData, extension);
+                    task.addSuspicious(new SearchResult(wantedTransport, imagePath));
+                }
+            }
+        }
+        tasksWebSocketHandler.sendTask(task);
+    }
+
+    // synchronize it?
+    private String saveBinaryImageData(byte[] imageData, String extension) {
+
+        String path = null;
+        try {
+            File tempFile = File.createTempFile("pic", extension, suspiciousPicturesDir.getFile());
+            try (InputStream in = new ByteArrayInputStream(imageData); OutputStream out = new FileOutputStream(tempFile)) {
+                IOUtils.copy(in, out);
+            }
+            path = tempFile.getName();
+            log.info("Image of suspicious matches saved at: {}", path);
+        } catch (Exception e) {
+            log.warn("Cant save image for suspicious matches", e);
+        }
+
+        return path;
     }
 
     private boolean isImage(MultipartFile file) {

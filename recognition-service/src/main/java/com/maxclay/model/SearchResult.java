@@ -1,5 +1,6 @@
 package com.maxclay.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
@@ -7,7 +8,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 public class SearchResult {
 
+    @JsonProperty("wanted_transport")
     private WantedTransport wantedTransport;
+
     private String image;
 
     public SearchResult() {

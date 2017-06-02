@@ -49,7 +49,7 @@ public class RecognitionServiceImpl implements RecognitionService {
             }
         }
 
-        logger.info("Recognized: {}", recognitionResult);
+        logger.debug("Recognized: {}", recognitionResult);
         return recognitionResult;
     }
 }

@@ -34,6 +34,8 @@ public class Task implements Serializable {
 
     private Set<PlateRecognitionResult> recognized;
 
+    private Set<SearchResult> suspicious;
+
     @JsonIgnore
     private Set<String> images;
 
@@ -108,13 +110,30 @@ public class Task implements Serializable {
         this.recognized = recognized;
     }
 
-    public void addRecognized(PlateRecognitionResult recognitionResult) {
+    public boolean addRecognized(PlateRecognitionResult recognitionResult) {
 
         if (recognized == null) {
             recognized = new HashSet<>();
         }
 
-        recognized.add(recognitionResult);
+        return recognized.add(recognitionResult);
+    }
+
+    public Set<SearchResult> getSuspicious() {
+        return suspicious;
+    }
+
+    public void setSuspicious(Set<SearchResult> suspicious) {
+        this.suspicious = suspicious;
+    }
+
+    public boolean addSuspicious(SearchResult searchResult) {
+
+        if (suspicious == null) {
+            suspicious = new HashSet<>();
+        }
+
+        return suspicious.add(searchResult);
     }
 
     public Set<String> getImages() {
@@ -177,6 +196,7 @@ public class Task implements Serializable {
                 .append("approximateSize", approximateSize)
                 .append("processed", processed)
                 .append("recognized", recognized)
+                .append("suspicious", suspicious)
                 .append("images", images)
                 .append("videos", videos)
                 .append("done", done)

@@ -14,7 +14,9 @@ import java.util.List;
 public interface TaskService {
 
     Task createTask();
-    
+
+    Task getById(String taskId);
+
     List<Task> getAll();
 
     void attachFileToTask(MultipartFile file, String taskId) throws IOException;
