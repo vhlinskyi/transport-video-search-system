@@ -3,15 +3,13 @@ security:
     client:
       clientId: account-service
       clientSecret: ${ACCOUNT_SERVICE_PASSWORD}
-      accessTokenUri: http://auth-service:5000/auth-service/oauth/token
+      accessTokenUri: http://localhost:5000/auth-service/oauth/token
       grant-type: client_credentials
       scope: server
 
 mongodb:
-  host: common-mongodb
-  username: user
-  password: ${MONGODB_PASSWORD}
-  database: transport_video_search_system
+  host: localhost
+  database: test
   port: 27017
 
 server:

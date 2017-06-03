@@ -1,8 +1,6 @@
 mongodb:
-  host: common-mongodb
-  username: user
-  password: ${MONGODB_PASSWORD}
-  database: transport_video_search_system
+  host: localhost
+  database: test
   port: 27017
 
 server:

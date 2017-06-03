@@ -23,6 +23,14 @@ dist/
 nbdist/
 .nb-gradle/
 
+# Images
+*.png
+*.jpeg
+*.jpg
+
+# Videos
+*.mp4
+
 ### Angular2 specific ###
 .idea
 node_modules

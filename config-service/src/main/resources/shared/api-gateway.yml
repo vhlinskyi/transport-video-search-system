@@ -19,7 +19,7 @@ zuul:
   routes:
     auth-service:
         path: /auth-service/**
-        url: http://auth-service:5000
+        url: http://localhost:5000
         stripPrefix: false
         sensitiveHeaders:
     account-service:
@@ -27,16 +27,16 @@ zuul:
             serviceId: account-service
             stripPrefix: false
             sensitiveHeaders:
-#    recognition-service:
-#            path: /recognition-service/**
-#            serviceId: recognition-service
-#            stripPrefix: false
-#            sensitiveHeaders:
-#    number-plate-service:
-#                path: /number-plate-service/**
-#                serviceId: number-plate-service
-#                stripPrefix: false
-#                sensitiveHeaders:
+    recognition-service:
+            path: /recognition-service/**
+            serviceId: recognition-service
+            stripPrefix: false
+            sensitiveHeaders:
+    number-plate-service:
+                path: /number-plate-service/**
+                serviceId: number-plate-service
+                stripPrefix: false
+                sensitiveHeaders:
 
 server:
   port: 4000
