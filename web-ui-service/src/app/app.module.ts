@@ -9,6 +9,7 @@ import { LoginComponent }   from './login/login.component';
 import { SignUpComponent }   from './signup/signup.component';
 import { ProfileComponent }   from './profile/profile.component';
 import { TasksComponent }   from './tasks/tasks.component';
+import { TaskDetailsComponent }   from './task-details/task-details.component';
 
 import { CanActivateViaOAuthGuard } from './oAuth.canActivateGuard';
 
@@ -16,21 +17,22 @@ import { CanActivateViaOAuthGuard } from './oAuth.canActivateGuard';
 import { routing } from './app.routes';
 
 // Importing ng2-pagination
-import {Ng2PaginationModule} from 'ng2-pagination';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 // Importing ng2-pagination
 import {FileUploadModule} from 'ng2-file-upload';
 
 @NgModule({
   providers:    [ CanActivateViaOAuthGuard ],
-  imports:      [ BrowserModule, routing, HttpModule, Ng2PaginationModule, FileUploadModule ],
+  imports:      [ BrowserModule, routing, HttpModule, NgxPaginationModule, FileUploadModule ],
   declarations: [ 	AppComponent, 
-  					LoginComponent, 
-  					LandingComponent,
-  					SignUpComponent,
-  					ProfileComponent,
-  					TasksComponent
-  				],
+          					LoginComponent, 
+          					LandingComponent,
+          					SignUpComponent,
+          					ProfileComponent,
+          					TasksComponent,
+                    TaskDetailsComponent
+        				],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

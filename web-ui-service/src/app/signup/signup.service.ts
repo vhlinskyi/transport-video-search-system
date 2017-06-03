@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class SignUpService {
   // TODO use some configuration file
-  private accountServiceUrl = 'http://192.168.1.146/account-service/';
+  private accountServiceUrl = 'http://tvss.me:4000/account-service/';
   constructor(public http: Http) {}
 
   registerUser(username:string, email:string, password:string, repeatPassword:string) : Observable<any> {

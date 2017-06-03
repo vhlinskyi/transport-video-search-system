@@ -38,5 +38,11 @@ zuul:
                 stripPrefix: false
                 sensitiveHeaders:
 
+spring:
+  http:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 2048MB
+
 server:
   port: 4000

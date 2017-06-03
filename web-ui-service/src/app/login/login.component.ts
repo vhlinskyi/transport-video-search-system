@@ -5,7 +5,7 @@ import { LoginService } from './login.service';
 
 @Component({
   selector: 'my-login',
-  templateUrl: 'app/login/login.html',
+  templateUrl: 'login.html',
   providers: [LoginService]
 })
 export class LoginComponent {

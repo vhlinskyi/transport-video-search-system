@@ -8,7 +8,7 @@ import { Profile } from '../model/profile';
 @Injectable()
 export class ProfileService {
   
-  private accountServiceUrl = 'http://192.168.1.146/account-service/';
+  private accountServiceUrl = 'http://tvss.me:4000/account-service/';
 
   constructor(public http: Http) {}
 

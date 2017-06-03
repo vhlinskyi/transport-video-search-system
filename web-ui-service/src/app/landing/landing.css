@@ -1,3 +1,9 @@
+h1 {
+  color: #369;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 250%;
+}
+
 html,
 body {
   height: 100%;
@@ -150,7 +156,7 @@ header {
   background-size: cover;
   -o-background-size: cover;
   background-position: center;
-  background-image: url('assets/img/header.jpg');
+  background-image: url('../../assets/img/header.jpg');
   text-align: center;
   color: white;
 }
@@ -363,3 +369,4 @@ img::-moz-selection {
 body {
   webkit-tap-highlight-color: #222222;
 }
+

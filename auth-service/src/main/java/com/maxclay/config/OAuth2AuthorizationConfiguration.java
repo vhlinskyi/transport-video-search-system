@@ -46,6 +46,11 @@ public class OAuth2AuthorizationConfiguration extends AuthorizationServerConfigu
                 .withClient("account-service")
                 .secret(env.getProperty("ACCOUNT_SERVICE_PASSWORD"))
                 .authorizedGrantTypes("client_credentials", "refresh_token")
+                .scopes("server")
+                .and()
+                .withClient("recognition-service")
+                .secret(env.getProperty("RECOGNITION_SERVICE_PASSWORD"))
+                .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("server");
 
     }

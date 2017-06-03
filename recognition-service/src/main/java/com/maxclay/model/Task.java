@@ -24,6 +24,7 @@ public class Task implements Serializable {
     @Id
     private String id;
 
+    private String owner;
     private String date;
 
     @JsonProperty("approximate_size")
@@ -50,12 +51,25 @@ public class Task implements Serializable {
         date = new Timestamp(System.currentTimeMillis()).toString();
     }
 
+    public Task(String owner) {
+        this();
+        this.owner = owner;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public long getProcessed() {
@@ -192,6 +206,7 @@ public class Task implements Serializable {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
+                .append("owner", owner)
                 .append("date", date)
                 .append("approximateSize", approximateSize)
                 .append("processed", processed)

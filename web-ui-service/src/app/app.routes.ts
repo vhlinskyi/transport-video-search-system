@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TasksComponent } from './tasks/tasks.component';
+import { TaskDetailsComponent }   from './task-details/task-details.component';
 
 import { CanActivateViaOAuthGuard } from './oAuth.canActivateGuard';
 
@@ -17,7 +18,8 @@ export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'profile', component: ProfileComponent, canActivate : [CanActivateViaOAuthGuard] },
-  { path: 'tasks', component: TasksComponent, canActivate : [CanActivateViaOAuthGuard] }
+  { path: 'tasks', component: TasksComponent, canActivate : [CanActivateViaOAuthGuard] },
+  { path: 'tasks/:id', component: TaskDetailsComponent, canActivate : [CanActivateViaOAuthGuard] }
 
 ];
 

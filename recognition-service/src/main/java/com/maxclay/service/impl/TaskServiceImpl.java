@@ -72,29 +72,46 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask() {
-        return taskRepository.save(new Task());
+    public Task createTask(String owner) {
+        return taskRepository.save(new Task(owner));
     }
 
     @Override
-    public Task getById(String taskId) {
+    public Task getById(String owner, String taskId) {
+
+        if (owner == null || owner.isEmpty()) {
+            throw new IllegalArgumentException("Owner can not be empty");
+        }
+
+        if (taskId == null || taskId.isEmpty()) {
+            throw new IllegalArgumentException("Task's identifier can not be empty");
+        }
 
         Task task = taskRepository.findOne(taskId);
         if (task == null) {
             throw new ResourceNotFoundException(String.format("Task with id = '%s' not found", taskId));
         }
 
+        if (!owner.equals(task.getOwner())) {
+            throw new ResourceNotFoundException(String.format("User '%s' does not have task with id = '%s' not found",
+                    owner, taskId));
+        }
+
         return task;
     }
 
-
     @Override
-    public List<Task> getAll() {
-        return taskRepository.findAll();
+    public List<Task> getAllByOwner(String owner) {
+
+        if (owner == null || owner.isEmpty()) {
+            throw new IllegalArgumentException("Owner can not be empty");
+        }
+
+        return taskRepository.findByOwner(owner);
     }
 
     @Override
-    public void attachFileToTask(MultipartFile file, String taskId) throws IOException {
+    public void attachFileToTask(MultipartFile file, String owner, String taskId) throws IOException {
 
         if (file == null || file.isEmpty()) {
             throw new ValidationException("File can not be empty");
@@ -104,13 +121,22 @@ public class TaskServiceImpl implements TaskService {
             throw new ValidationException("File has wrong type. Must be either video or image");
         }
 
+        if (owner == null || owner.isEmpty()) {
+            throw new IllegalArgumentException("Owner can not be empty");
+        }
+
         if (taskId == null || taskId.isEmpty()) {
-            throw new ValidationException("Task's identifier can not be empty");
+            throw new IllegalArgumentException("Task's identifier can not be empty");
         }
 
         Task task = taskRepository.findOne(taskId);
         if (task == null) {
             throw new ResourceNotFoundException(String.format("Task with id = '%s' not found", taskId));
+        }
+
+        if (!owner.equals(task.getOwner())) {
+            throw new ResourceNotFoundException(String.format("User '%s' does not have task with id = '%s' not found",
+                    owner, taskId));
         }
 
         String fileExtension = getFileExtension(file.getOriginalFilename());
@@ -133,9 +159,26 @@ public class TaskServiceImpl implements TaskService {
 
     // TODO review it
     @Override
-    public Task process(String taskId) {
+    public Task process(String owner, String taskId) {
+
+        if (owner == null || owner.isEmpty()) {
+            throw new IllegalArgumentException("Owner can not be empty");
+        }
+
+        if (taskId == null || taskId.isEmpty()) {
+            throw new IllegalArgumentException("Task's identifier can not be empty");
+        }
 
         Task task = taskRepository.findOne(taskId);
+        if (task == null) {
+            throw new ResourceNotFoundException(String.format("Task with id = '%s' not found", taskId));
+        }
+
+        if (!owner.equals(task.getOwner())) {
+            throw new ResourceNotFoundException(String.format("User '%s' does not have task with id = '%s' not found",
+                    owner, taskId));
+        }
+
         long imagesNumber = task.getImagesNumber();
         long framesNumber = task.getVideos().stream()
                 .mapToLong(videoService::getDurationInSeconds)

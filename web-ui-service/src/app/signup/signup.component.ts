@@ -4,7 +4,7 @@ import { SignUpService } from './signup.service';
 
 @Component({
   selector: 'sign-up',
-  templateUrl: 'app/signup/signup.html',
+  templateUrl: 'signup.html',
   providers: [SignUpService]
 })
 export class SignUpComponent { 

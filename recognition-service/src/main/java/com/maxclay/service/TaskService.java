@@ -13,14 +13,14 @@ import java.util.List;
  */
 public interface TaskService {
 
-    Task createTask();
+    Task createTask(String owner);
 
-    Task getById(String taskId);
+    Task getById(String owner, String taskId);
 
-    List<Task> getAll();
+    List<Task> getAllByOwner(String owner);
 
-    void attachFileToTask(MultipartFile file, String taskId) throws IOException;
+    void attachFileToTask(MultipartFile file, String owner, String taskId) throws IOException;
 
-    Task process(String taskId);
+    Task process(String owner, String taskId);
 
 }

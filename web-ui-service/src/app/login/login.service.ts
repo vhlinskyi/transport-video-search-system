@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class LoginService {
-  private OauthLoginEndPointUrl = 'http://192.168.1.146/auth-service/oauth/token';  // Oauth Login EndPointUrl to web API
+  private OauthLoginEndPointUrl = 'http://tvss.me:4000/auth-service/oauth/token';  // Oauth Login EndPointUrl to web API
   private clientId ='browser';
   private clientSecret ='';
   constructor(public http: Http) {}

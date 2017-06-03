@@ -104,10 +104,10 @@
                         </div>
                         <!-- /input-group -->
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="/profile"><i class="fa fa-user fa-fw"></i> Profile</a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="/tasks"><i class="fa fa-tasks fa-fw"></i> Tasks</a>
                     </li>
                     <li>
@@ -145,7 +145,7 @@
                             
 <!--                             <div class="container">
  --> 
-                                <h3>Choose image or video files to create new task</h3>
+                                <h3>Choose image or video files to create a new task</h3>
                              
 <!--                                  <div class="row">
  -->
@@ -198,14 +198,6 @@
                                                     <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
                                                 </td>
                                                 <td nowrap>
-                                                    <button type="button" class="btn btn-success btn-xs"
-                                                            (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                                                        <span class="glyphicon glyphicon-upload"></span> Upload
-                                                    </button>
-                                                    <button type="button" class="btn btn-warning btn-xs"
-                                                            (click)="item.cancel()" [disabled]="!item.isUploading">
-                                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                                                    </button>
                                                     <button type="button" class="btn btn-danger btn-xs"
                                                             (click)="item.remove()">
                                                         <span class="glyphicon glyphicon-trash"></span> Remove
@@ -223,12 +215,8 @@
                                                 </div>
                                             </div>
                                             <button type="button" class="btn btn-success btn-s"
-                                                    (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-                                                <span class="glyphicon glyphicon-upload"></span> Upload all
-                                            </button>
-                                            <button type="button" class="btn btn-warning btn-s"
-                                                    (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                                                    (click)="createTask()" [disabled]="!uploader.getNotUploadedItems().length">
+                                                <span class="glyphicon glyphicon-upload"></span> Create
                                             </button>
                                             <button type="button" class="btn btn-danger btn-s"
                                                     (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
@@ -254,15 +242,33 @@
                             <table class="table">
                                 <tr>
                                     <th>#</th>
-                                    <th>Game</th>
-                                    <th>Platform</th> 
-                                    <th>Release</th>
+                                    <th>Created</th>
+                                    <th>Size</th> 
+                                    <th>Progress</th>
+                                    <th>Status</th>
+                                    <th></th>
                                 </tr>
-                                <tr *ngFor="let game of games | paginate: {itemsPerPage: 5, currentPage:page, id: '1'}; let i = index">
+                                <tr *ngFor="let task of tasks | paginate: {itemsPerPage: 5, currentPage:page, id: '1'}; let i = index">
                                     <td>{{i + 1}}</td>
-                                    <td>{{game.game}}</td>
-                                    <td>{{game.platform}}</td>
-                                    <td>{{game.release}}</td>
+                                    <td>{{task.date}}</td>
+                                    <td>{{task.approximate_size}}</td>
+                                    <td>
+                                        <div class='progress' style='margin-bottom: 0;'>
+                                            <div class='progress-bar' [style.width]='task.progress'></div>
+                                        </div>  
+
+                                    </td>
+                                    <td class='text-center'>
+                                        <span *ngIf='task.done'><i class='glyphicon glyphicon-ok'></i></span>
+                                        <span *ngIf='!task.done && !task.processing'><i class='glyphicon glyphicon-remove'></i></span>
+
+                                    </td>
+                                    <td>
+                                        <a class='btn btn-success btn-s' href='tasks/{{task.id}}'>
+                                                <span class='glyphicon glyphicon-upload'></span> Details
+                                        </a>
+
+                                    </td>
                                 </tr>
                             </table>
                             <pagination-controls (pageChange)="page = $event" id="1"

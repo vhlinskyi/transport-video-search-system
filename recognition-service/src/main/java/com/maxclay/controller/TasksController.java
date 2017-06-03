@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 
 /**
  * @author Vlad Glinskiy
@@ -29,43 +30,38 @@ public class TasksController {
         this.taskService = taskService;
     }
 
-    // TODO create task only for authenticated users
     @RequestMapping(value = "/tasks", method = RequestMethod.POST)
-    public ResponseEntity createTask(@RequestBody(required = false) JsonNode task) {
+    public ResponseEntity createTask(Principal principal, @RequestBody(required = false) JsonNode task) {
 
-        Task created = taskService.createTask();
+        Task created = taskService.createTask(principal.getName());
         log.info("Task '{}' created", created);
         return ResponseEntity.ok(created);
     }
 
-    // TODO fetch task only for authenticated users
     @RequestMapping(value = "/tasks/{taskId}", method = RequestMethod.GET)
-    public ResponseEntity getTask(@PathVariable String taskId) {
+    public ResponseEntity getTask(Principal principal, @PathVariable String taskId) {
 
-        Task fetched = taskService.getById(taskId);
+        Task fetched = taskService.getById(principal.getName(), taskId);
         return ResponseEntity.ok(fetched);
     }
 
-    // TODO create task only for authenticated users
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
-    public ResponseEntity getAllTasks() {
-        return ResponseEntity.ok(Lists.reverse(taskService.getAll()));
+    public ResponseEntity getAllTasks(Principal principal) {
+        return ResponseEntity.ok(Lists.reverse(taskService.getAllByOwner(principal.getName())));
     }
 
-    // TODO add files only for authenticated users
     @RequestMapping(value = "/tasks/{taskId}", method = RequestMethod.POST)
-    public ResponseEntity uploadFile(@PathVariable String taskId, MultipartFile file) throws IOException {
+    public ResponseEntity uploadFile(Principal principal, @PathVariable String taskId, MultipartFile file) throws IOException {
 
-        taskService.attachFileToTask(file, taskId);
+        taskService.attachFileToTask(file, principal.getName(), taskId);
         log.debug("File '{}' attached to the task with id = '{}'", file.getOriginalFilename(), taskId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    // TODO process tasks only for authenticated users, check for the task owner
     @RequestMapping(value = "/tasks/{taskId}/process", method = RequestMethod.POST)
-    public ResponseEntity processTask(@PathVariable String taskId) {
+    public ResponseEntity processTask(Principal principal, @PathVariable String taskId) {
 
-        Task task = taskService.process(taskId);
+        Task task = taskService.process(principal.getName(), taskId);
         log.info("Processing task '{}'", task);
         return ResponseEntity.ok(task);
     }
