@@ -39,14 +39,17 @@
                 </ul>
                 <!-- /.dropdown-tasks -->
             </li>
+
             <!-- /.dropdown -->
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <a (click)="setDefaultBellColor()" [style.color]='bellColor' class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-alerts">
+                
+                <!-- No alerts -->
+                <ul *ngIf="!alertsList || alertsList.length == 0" class="dropdown-menu dropdown-alerts">
                     <li>
-                        <a href="#">
+                        <a href="/alerts">
                             <div>
                                 You don't have any alerts
                             </div>
@@ -60,8 +63,33 @@
                         </a>
                     </li>
                 </ul>
+
+                <!-- Alerts exist  -->
+                <ul *ngIf="alertsList && alertsList.length > 0" class="dropdown-menu dropdown-alerts">
+                        <ng-container *ngFor="let alert of alertsList">
+                            <li>
+                                <a href="/alerts">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> {{alert.message}}
+                                        <span class="pull-right text-muted small">{{alert.time | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        </ng-container>
+
+                        <li>
+                            <a class="text-center" href="/alerts">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+
                 <!-- /.dropdown-alerts -->
             </li>
+
             <!-- /.dropdown -->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -73,7 +101,7 @@
                     <li><a href="/settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                     <li class="divider"></li>
-                    <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    <li><a (click)="logout()" ><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -85,17 +113,7 @@
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
-                    <li class="sidebar-search">
-                        <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Search..."/>
-                            <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                        </div>
-                        <!-- /input-group -->
-                    </li>
+
                     <li class="active">
                         <a href="/profile"><i class="fa fa-user fa-fw"></i> Profile</a>
                     </li>
@@ -133,33 +151,45 @@
                         <div class="panel-heading">
                             User Information
                         </div>
-                        <div class="panel-body">
+                        <div *ngIf="profile" class="panel-body">
 
                             <!-- User's Avatar -->
                             <div class="col-lg-3">
-                                <img class="media-object" src="https://avatars3.githubusercontent.com/u/8948836" width="200px" height="200px"/>
+                                <img class="media-object" src="http://tvss.me:4000/account-service/picture/{{profile.picture}}" width="200px" height="200px"/>
                             </div>
 
                             <!-- User's Info -->
                             <div class="col-lg-9">
                                 <div>
-                                    <label >User name: </label>
-                                    <b *ngIf="profile">{{profile.name}}</b>
+                                    <label >Username: </label>
+                                    <b>{{profile.name}}</b>
                                 </div>
-                                <div>
-                                    <label >Phone: </label>
-                                    <b>+380932485925</b>
+                                <div *ngIf="profile.first_name">
+                                    <label >First name: </label>
+                                    <b >{{profile.first_name}}</b>
                                 </div>
-                                <div>
-                                    <label >Skype: </label>
-                                    <b>skypename</b>
+                                <div *ngIf="profile.last_name">
+                                    <label >Last name: </label>
+                                    <b >{{profile.last_name}}</b>
                                 </div>
                                 <div>
                                     <label >Email: </label>
                                     <b *ngIf="profile">{{profile.email}}</b>
                                 </div>
+                                <div *ngIf="profile.phone">
+                                    <label >Phone: </label>
+                                    <b >{{profile.phone}}</b>
+                                </div>
+                                <div *ngIf="profile.skype_name">
+                                    <label >Skype: </label>
+                                    <b >{{profile.skype_name}}</b>
+                                </div>
+                                
                             </div>
 
+                            <div *ngIf="profile.quote">
+                                <i>{{profile.quote}}</i>
+                            </div>
                         </div>
                     </div>
                     <!--End Of User Info Panel-->
@@ -175,24 +205,36 @@
                     </div>
                     <!--End Of Activity Panel-->
 
-                    <!--Suspicious Matches Panel-->
-                    <div class="panel panel-default">
+                    <!--Suspicious Transport Panel-->
+                    <div *ngIf="suspiciousList && suspiciousList.length > 0" class="panel panel-default">
                         <div class="panel-heading">
-                            Suspicious Matches Found By User
+                            Suspicious Transport
                         </div>
-                        <div class="panel-body">
-                            <table class="table">
+                        <div class="panel-body">    
+                                <table class="table">
                                 <tr>
                                     <th>#</th>
-                                    <th>Game</th>
-                                    <th>Platform</th> 
-                                    <th>Release</th>
+                                    <th>Number plate</th>
+                                    <th>Model</th>
+                                    <th>Color</th>
+                                    <th>Body number</th>
+                                    <th>Chassis number</th>
+                                    <th>Department</th>
+                                    <th>Preview</th>
                                 </tr>
-                                <tr *ngFor="let game of games | paginate: {itemsPerPage: 5, currentPage:page, id: '1'}; let i = index">
+                                <tr *ngFor="let match of suspiciousList | paginate: {itemsPerPage: 2, currentPage:page, id: '1'}; let i = index">
                                     <td>{{i + 1}}</td>
-                                    <td>{{game.game}}</td>
-                                    <td>{{game.platform}}</td>
-                                    <td>{{game.release}}</td>
+                                    <td>{{match.wanted_transport.number_plate}}</td>
+                                    <td>{{match.wanted_transport.model}}</td>
+                                    <td>{{match.wanted_transport.color}}</td>
+                                    <td>{{match.wanted_transport.body_number}}</td>
+                                    <td>{{match.wanted_transport.chassis_number}}</td>
+                                    <td>{{match.wanted_transport.department}}</td>
+                                    <td>
+                                    
+                                        <img class='media-object' src='http://tvss.me:4000/recognition-service/suspicious-picture/{{match.image}}' width='300px' height='200px'/>
+
+                                    </td>
                                 </tr>
                             </table>
                             <pagination-controls (pageChange)="page = $event" id="1"
@@ -200,10 +242,9 @@
                                   directionLinks="true"
                                   autoHide="true">
                             </pagination-controls>
-
                         </div>
                     </div>
-                    <!--End Of Suspicious Matches Panel-->
+                    <!--End Of Suspicious Transport Panel-->
 
                 </div>
             </div>

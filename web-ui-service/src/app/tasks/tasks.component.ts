@@ -2,18 +2,23 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Http , Response, Headers } from '@angular/http';
 import { TaskUploader } from './task-uploader.class';
 import { Observable } from 'rxjs/Rx';
+import { Router } from '@angular/router';
 
 import { WebSocketService } from "../websocket/websocket.service";
 import { TaskChannelService } from "../websocket/task-channel.service";
+import { AlertChannelService } from "../websocket/alert-channel.service";
 
 import { Task } from "../model/task";
+
+import { AlertsService } from '../alerts/alerts.service';
+import { Alert } from '../model/alert';
 
 
 @Component({
     selector: 'tasks',
     templateUrl: 'tasks.html',
     styleUrls: ['../../assets/css/sb-admin-2.css'],
-    providers: [WebSocketService, TaskChannelService]
+    providers: [WebSocketService, TaskChannelService, AlertsService, AlertChannelService]
 })
 export class TasksComponent { 
 
@@ -27,8 +32,17 @@ export class TasksComponent {
 
     // TODO change to the dictionary
     tasks : Task[] = [];
+    
+    alertsList : [Alert];
+    bellColor = '#337ab7';
+    
 
-    public constructor(http: Http, private taskChannelService:TaskChannelService, private webSocketService:WebSocketService) {
+    public constructor(http: Http,
+                      private router: Router,
+                      private alertsService: AlertsService,
+                      private taskChannelService:TaskChannelService,
+                      private alertChannelService:AlertChannelService,  
+                      private webSocketService:WebSocketService) {
         
         this.http = http;
         this.webSocketService.start( 'ws://tvss.me:7000/recognition-service/ws-tasks' );
@@ -39,7 +53,39 @@ export class TasksComponent {
             this.updateTask(data);
         } );
 
+        this.webSocketService.start( 'ws://tvss.me:7000/recognition-service/ws-alerts' );
+        this.alertChannelService.observableData.subscribe( ( data:Object ) => {
+            this.addAlert(data);
+        });
+
     }
+
+    private addAlert(data: any) {
+      let alert = <Alert>({
+        id: data.id,
+        type: data.type,
+        message: data.message,
+        time: data.date,
+        refs: data.refs
+      
+      });
+
+      // todo change it to use channels properly
+      if(!data.type) {
+        return;
+      }
+
+      this.bellColor = '#e81f1f';
+      this.alertsList.unshift(alert);
+      if(this.alertsList.length > 3) {
+        this.alertsList.pop();
+      }
+    }
+
+    setDefaultBellColor() {
+      this.bellColor = '#337ab7';
+    }
+
 
     private updateTask(task:any): void {
         
@@ -68,6 +114,23 @@ export class TasksComponent {
                       .subscribe(result => {
                               this.tasks = result;
                         });
+
+        console.log('Fetching user alerts');
+        this.alertsService.getRecentAlerts().subscribe(
+                  response => {
+                    console.log("User alerts:");
+                    console.log(response);
+                    this.alertsList = response;
+                  },
+                  error => {
+                      if(error.status === 401) {
+                          localStorage.removeItem('token');
+                          this.router.navigateByUrl('/login');
+                      } else {
+                          alert(error.json());
+                      }
+                  }
+                );
 
       }
 
@@ -127,10 +190,27 @@ export class TasksComponent {
     }
 
     private handleError (error: any) {
+
+        if(error.json() && error.json().status === 401) {
+          localStorage.removeItem('token');
+          this.router.navigateByUrl('/login');
+        } else {
+          this.showErrorMessage(error);
+        }
         return Observable.throw(error);
+    }
+
+    private showErrorMessage(err: any) {
+      let errorBody = err.json();
+      alert(errorBody.message);
     }
 
   	ngOnDestroy() {
   	}
+
+    logout() {
+      localStorage.removeItem('token');
+      this.router.navigateByUrl('/');
+    }
 
 }

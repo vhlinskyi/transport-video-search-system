@@ -35,7 +35,13 @@ export class ProfileService {
     let profile = <Profile>({
       id:     res.id,
       name:   res.name,
-      email:  res.email
+      email:  res.email,
+      first_name: res.first_name,
+      last_name: res.last_name,
+      skype_name: res.skype_name,
+      phone: res.phone,
+      quote: res.quote,
+      picture: res.picture
     });
 
     return profile;

@@ -20,7 +20,8 @@ export class TaskDetailsComponent {
     public recognitionServiceURL = 'http://tvss.me:4000/recognition-service/';
     task : Task;
 
-    public constructor(private http: Http, 
+    public constructor(private http: Http,
+                       private router: Router,
                        private taskChannelService:TaskChannelService, 
                        private webSocketService:WebSocketService,
                        public route: ActivatedRoute) {
@@ -119,6 +120,23 @@ export class TaskDetailsComponent {
     }
 
     private handleError (error: any) {
+
+        if(error.json() && error.json().status === 401) {
+          localStorage.removeItem('token');
+          this.router.navigateByUrl('/login');
+        } else {
+          this.showErrorMessage(error);
+        }
         return Observable.throw(error);
+    }
+
+    private showErrorMessage(err: any) {
+      let errorBody = err.json();
+      alert(errorBody.message);
+    }
+
+    logout() {
+      localStorage.removeItem('token');
+      this.router.navigateByUrl('/');
     }
 }

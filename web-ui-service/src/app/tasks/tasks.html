@@ -47,14 +47,17 @@
                 </ul>
                 <!-- /.dropdown-tasks -->
             </li>
+
             <!-- /.dropdown -->
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <a (click)="setDefaultBellColor()" [style.color]='bellColor' class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-alerts">
+                
+                <!-- No alerts -->
+                <ul *ngIf="!alertsList || alertsList.length == 0" class="dropdown-menu dropdown-alerts">
                     <li>
-                        <a href="#">
+                        <a href="/alerts">
                             <div>
                                 You don't have any alerts
                             </div>
@@ -68,8 +71,33 @@
                         </a>
                     </li>
                 </ul>
+
+                <!-- Alerts exist  -->
+                <ul *ngIf="alertsList && alertsList.length > 0" class="dropdown-menu dropdown-alerts">
+                        <ng-container *ngFor="let alert of alertsList">
+                            <li>
+                                <a href="/alerts">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> {{alert.message}}
+                                        <span class="pull-right text-muted small">{{alert.time | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        </ng-container>
+
+                        <li>
+                            <a class="text-center" href="/alerts">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+
                 <!-- /.dropdown-alerts -->
             </li>
+
             <!-- /.dropdown -->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -81,7 +109,7 @@
                     <li><a href="/settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                     <li class="divider"></li>
-                    <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    <li><a (click)="logout()" ><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -93,17 +121,7 @@
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
-                    <li class="sidebar-search">
-                        <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Search..."/>
-                            <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                        </div>
-                        <!-- /input-group -->
-                    </li>
+                    
                     <li>
                         <a href="/profile"><i class="fa fa-user fa-fw"></i> Profile</a>
                     </li>

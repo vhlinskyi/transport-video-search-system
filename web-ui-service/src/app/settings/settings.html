@@ -89,7 +89,7 @@
 
                 <!-- /.dropdown-alerts -->
             </li>
-            
+
             <!-- /.dropdown -->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -117,13 +117,13 @@
                     <li>
                         <a href="/profile"><i class="fa fa-user fa-fw"></i> Profile</a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="/tasks"><i class="fa fa-tasks fa-fw"></i> Tasks</a>
                     </li>
                     <li>
                         <a href="/alerts"><i class="fa fa-bell fa-fw"></i> Alerts</a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="/settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                 </ul>
@@ -138,7 +138,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Task Details</h1>
+                    <h1 class="page-header">Settings</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -146,117 +146,63 @@
             <div class="row">
                 <div class="col-lg-12">
 
-                    <!--Task Info Panel-->
+                    <!--User Info Panel-->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Task Information
+                            User Information
                         </div>
-                        <div *ngIf="task" class="panel-body">
+                        <div *ngIf="profile" class="panel-body" >
 
-                                <div>
-                                    <label >Status: </label>
-                                    <b *ngIf="task.done">Done</b>
-                                    <b *ngIf="task.processing">Processing</b>
-                                    <b *ngIf="!task.done && !task.processing">Error</b>
-                                </div>
-                                <div *ngIf="task.processing">
-                                    <label>Progress: </label>
-                                    <b>{{task.progress}}</b>
-                                </div>
-                                <div>
-                                    <label>Created: </label>
-                                    <b>{{task.date}}</b>
-                                </div>
-                                <div>
-                                    <label >Number of video files: </label>
-                                    <b>{{task.videos_number}}</b>
-                                </div>
-                                <div>
-                                    <label>Number of images: </label>
-                                    <b>{{task.images_number}}</b>
-                                </div>
-                                <div>
-                                    <label>Size: </label>
-                                    <b>{{task.approximate_size}} points</b>
-                                </div>
-                                <div>
-                                    <label>Number of recognized plates: </label>
-                                    <b *ngIf="task.recognized">{{task.recognized.length}}</b>
-                                    <b *ngIf="!task.recognized">0</b>
-                                </div>
+                            <div  class="col-lg-3">
+                                <img class="media-object" src="http://tvss.me:4000/account-service/picture/{{profile.picture}}" width="200px" height="200px"/>
+                            </div>
 
-                        </div>
-                    </div>
-                    <!--End Of Task Info Panel-->
-                    
-                    <!--Recognized Plates Panel-->
-                    <div *ngIf="task && task.recognized" class="panel panel-default">
-                        <div class="panel-heading">
-                            Recognized Plates
-                        </div>
-                        <div class="panel-body">
-                            <table class="table">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Number</th>
-                                    <th>Overall Confidence</th> 
-                                </tr>
-                                <tr *ngFor="let plate of task.recognized | paginate: {itemsPerPage: 5, currentPage:page, id: '1'}; let i = index">
-                                    <td>{{i + 1}}</td>
-                                    <td>{{plate.plate_number}}</td>
-                                    <td>{{plate.overall_confidence}}</td>
-                                </tr>
-                            </table>
-                            <pagination-controls (pageChange)="page = $event" id="1"
-                                  maxSize="5"
-                                  directionLinks="true"
-                                  autoHide="true">
-                            </pagination-controls>
-
-                        </div>
-                    </div>
-                    <!--End Of Recognized Plates Panel-->
-
-                    <!--Suspicious Transport Panel-->
-                    <div *ngIf="task && task.suspicious && task.suspicious.length > 0" class="panel panel-default">
-                        <div class="panel-heading">
-                            Suspicious Transport
-                        </div>
-                        <div class="panel-body">    
-                                <table class="table">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Number plate</th>
-                                    <th>Model</th>
-                                    <th>Color</th>
-                                    <th>Body number</th>
-                                    <th>Chassis number</th>
-                                    <th>Department</th>
-                                    <th>Preview</th>
-                                </tr>
-                                <tr *ngFor="let match of task.suspicious | paginate: {itemsPerPage: 2, currentPage:page, id: '1'}; let i = index">
-                                    <td>{{i + 1}}</td>
-                                    <td>{{match.wanted_transport.number_plate}}</td>
-                                    <td>{{match.wanted_transport.model}}</td>
-                                    <td>{{match.wanted_transport.color}}</td>
-                                    <td>{{match.wanted_transport.body_number}}</td>
-                                    <td>{{match.wanted_transport.chassis_number}}</td>
-                                    <td>{{match.wanted_transport.department}}</td>
-                                    <td>
+                            <form role="form" (submit)="updateProfile($event, first_name.value, last_name.value, skype_name.value, phone.value, quote.value, file)"  >
+                                <fieldset class="col-lg-10">
                                     
-                                        <img class='media-object' src='{{recognitionServiceURL}}/suspicious-picture/{{match.image}}' width='300px' height='200px'/>
+                                    <div *ngIf="profile"  class="form-group">
+                                        <label for="username">Username: </label>
+                                        <input class="form-control" type="text" id="username" value="{{profile.name}}" disabled="true" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="first_name">First name: </label>
+                                        <input class="form-control" type="text" id="first_name" placeholder="Enter first name" value="{{profile.first_name}}" #first_name />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last_name">Last name: </label>
+                                        <input class="form-control" type="text" id="last_name" placeholder="Enter last name" value="{{profile.last_name}}" #last_name />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email: </label>
+                                        <input class="form-control" type="email" id="email" disabled="true" value="{{profile.email}}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone: </label>
+                                        <input class="form-control" type="number" id="phone" placeholder="+380932485925" value="{{profile.phone}}" #phone />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="skype_name">Skype name: </label>
+                                        <input class="form-control" type="text" id="skype_name" placeholder="Enter skype name" value="{{profile.skype_name}}" #skype_name />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Quote: </label>
+                                        <textarea class="form-control" rows="3" th:field="*{description}" placeholder="Quote will be displayed right after your profile info and below each message" value="{{profile.quote}}" #quote ></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="file">Choose image to update profile picture: </label>
+                                        <input type="file" id="file" name="file" #file />
+                                    </div>
+                                    <div class="submit">
+                                        <button class="btn btn-success" type="submit">Submit</button>
+                                    </div>
+                                </fieldset>
+                            </form>
 
-                                    </td>
-                                </tr>
-                            </table>
-                            <pagination-controls (pageChange)="page = $event" id="1"
-                                  maxSize="5"
-                                  directionLinks="true"
-                                  autoHide="true">
-                            </pagination-controls>
+
                         </div>
                     </div>
-                    <!--End Of Suspicious Transport Panel-->
+                    <!--End Of User Info Panel-->
+
 
                 </div>
             </div>

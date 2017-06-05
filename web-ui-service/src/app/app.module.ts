@@ -10,6 +10,8 @@ import { SignUpComponent }   from './signup/signup.component';
 import { ProfileComponent }   from './profile/profile.component';
 import { TasksComponent }   from './tasks/tasks.component';
 import { TaskDetailsComponent }   from './task-details/task-details.component';
+import { SettingsComponent }   from './settings/settings.component';
+import { AlertsComponent }   from './alerts/alerts.component';
 
 import { CanActivateViaOAuthGuard } from './oAuth.canActivateGuard';
 
@@ -31,7 +33,9 @@ import {FileUploadModule} from 'ng2-file-upload';
           					SignUpComponent,
           					ProfileComponent,
           					TasksComponent,
-                    TaskDetailsComponent
+                    TaskDetailsComponent,
+                    SettingsComponent,
+                    AlertsComponent
         				],
   bootstrap:    [ AppComponent ]
 })
