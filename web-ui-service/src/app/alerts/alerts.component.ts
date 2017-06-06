@@ -93,4 +93,9 @@ export class AlertsComponent {
   	ngOnDestroy() {
   	}
 
+    logout() {
+      localStorage.removeItem('token');
+      this.router.navigateByUrl('/');
+    }
+
 }

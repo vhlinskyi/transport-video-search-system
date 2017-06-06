@@ -20,10 +20,10 @@
                 <li>
                     <a class="page-scroll" href="#contact">Contact</a>
                 </li>
-                <li>
+                <li *ngIf="isAuthenticated()">
                     <a class="page-scroll" href="/profile">Profile</a>
                 </li>
-                <li>
+                <li *ngIf="!isAuthenticated()">
                     <a class="page-scroll" href="/login">Login</a>
                 </li>
             </ul>

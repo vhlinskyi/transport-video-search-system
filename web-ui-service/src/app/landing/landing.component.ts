@@ -5,4 +5,9 @@ import {Component} from '@angular/core';
   templateUrl: 'landing.html',
   styleUrls: ['landing.css']
 })
-export class LandingComponent {}
+export class LandingComponent {
+
+	isAuthenticated() {
+		return localStorage.getItem('token') && localStorage.getItem('token') != null;
+	}
+}
