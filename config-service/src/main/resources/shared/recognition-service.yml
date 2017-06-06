@@ -11,11 +11,9 @@ server:
   context-path: /recognition-service
   port: 7000
 
-spring:
-  http:
-    multipart:
-      max-file-size: 1024MB
-      max-request-size: 2048MB
+multipart:
+  maxFileSize: 1024MB
+  maxRequestSize: 2048MB
 
 alpr:
   country: eu
@@ -24,8 +22,8 @@ alpr:
 
 files:
   upload:
-    tasksFilesPath: file:./task-files
-    suspiciousPicturesPath: file:./suspicious-matches
+    tasksFilesPath: ${TASK_FILES_DIRECTORY}
+    suspiciousPicturesPath: ${SUSPICIOUS_MATCHES_DIRECTORY}
 
 mongodb:
   host: localhost

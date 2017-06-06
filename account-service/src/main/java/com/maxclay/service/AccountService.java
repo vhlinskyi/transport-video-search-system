@@ -2,6 +2,7 @@ package com.maxclay.service;
 
 import com.maxclay.dto.AccountDto;
 import com.maxclay.model.Account;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -61,6 +62,15 @@ public interface AccountService {
      * @throws IllegalArgumentException if the specified object is <code>null</code>.
      */
     Account save(Account account);
+
+    /**
+     * Updates account of the specified user.
+     *
+     * @param username username of user, whose account will be updated.
+     * @param account  account, which contains updating data.
+     * @return updated account.
+     */
+    Account update(String username, Account account, MultipartFile profilePicture);
 
     /**
      * Deletes specified account.

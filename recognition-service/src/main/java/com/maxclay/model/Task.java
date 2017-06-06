@@ -134,7 +134,7 @@ public class Task implements Serializable {
     }
 
     public Set<SearchResult> getSuspicious() {
-        return suspicious;
+        return (suspicious != null) ? suspicious : Collections.emptySet();
     }
 
     public void setSuspicious(Set<SearchResult> suspicious) {

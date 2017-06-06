@@ -22,7 +22,7 @@ public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerA
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/ws-tasks", "/suspicious-picture/**").permitAll()
+                .antMatchers("/ws-tasks", "/ws-alerts", "/suspicious-picture/**").permitAll()
                 .anyRequest().authenticated();
     }
 

@@ -1,5 +1,6 @@
 package com.maxclay.service;
 
+import com.maxclay.model.SearchResult;
 import com.maxclay.model.Task;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -32,6 +32,12 @@ public class AccountDtoToAccount implements Converter<AccountDto, Account> {
         account.setId(accountDto.getId());
         account.setName(accountDto.getName());
         account.setEmail(accountDto.getEmail());
+        account.setFirstName(accountDto.getFirstName());
+        account.setLastName(accountDto.getLastName());
+        account.setPhone(accountDto.getPhone());
+        account.setSkypeName(accountDto.getSkypeName());
+        account.setQuote(accountDto.getQuote());
+        account.setPicture(accountDto.getPicture());
 
         return account;
     }

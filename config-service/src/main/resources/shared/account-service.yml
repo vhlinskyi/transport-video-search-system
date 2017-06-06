@@ -12,6 +12,15 @@ mongodb:
   database: test
   port: 27017
 
+multipart:
+  maxFileSize: 1024MB
+  maxRequestSize: 2048MB
+
+files:
+  upload:
+    profilePicturesDir: ${PROFILE_PICTURES_DIRECTORY}
+    defaultProfilePicture: classpath:/static/images/default_user_pic.png
+
 server:
   context-path: /account-service
   port: 6000

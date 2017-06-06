@@ -4,17 +4,17 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 20000
+            timeoutInMilliseconds: 80000
 
 ribbon:
-  ReadTimeout: 20000
-  ConnectTimeout: 20000
+  ReadTimeout: 80000
+  ConnectTimeout: 80000
 
 zuul:
   ignoredServices: '*'
   host:
-    connect-timeout-millis: 20000
-    socket-timeout-millis: 20000
+    connect-timeout-millis: 80000
+    socket-timeout-millis: 80000
 
   routes:
     auth-service:
@@ -38,11 +38,9 @@ zuul:
                 stripPrefix: false
                 sensitiveHeaders:
 
-spring:
-  http:
-    multipart:
-      max-file-size: 1024MB
-      max-request-size: 2048MB
+multipart:
+  maxFileSize: 1024MB
+  maxRequestSize: 2048MB
 
 server:
   port: 4000

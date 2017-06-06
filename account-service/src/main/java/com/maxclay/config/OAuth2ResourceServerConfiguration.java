@@ -23,6 +23,7 @@ public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerA
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/").permitAll()
+                .antMatchers("/picture", "/picture/**").permitAll()
                 .anyRequest().authenticated();
     }
 

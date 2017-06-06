@@ -1,5 +1,6 @@
 package com.maxclay.config;
 
+import com.maxclay.controller.AlertsWebSocketHandler;
 import com.maxclay.controller.MessageHandler;
 import com.maxclay.controller.TasksWebSocketHandler;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(messageHandler(), "/images");
         registry.addHandler(tasksHandler(), "/ws-tasks").setAllowedOrigins("*");
+        registry.addHandler(alertsHandler(), "/ws-alerts").setAllowedOrigins("*");
     }
 
     @Bean
@@ -40,4 +42,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
         return new TasksWebSocketHandler();
     }
 
+    @Bean
+    public AlertsWebSocketHandler alertsHandler() {
+        return new AlertsWebSocketHandler();
+    }
 }

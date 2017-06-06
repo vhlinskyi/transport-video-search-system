@@ -2,11 +2,13 @@ package com.maxclay.service.impl;
 
 import com.maxclay.client.NumberPlateSearchService;
 import com.maxclay.config.FilesUploadProperties;
+import com.maxclay.controller.AlertsWebSocketHandler;
 import com.maxclay.controller.TasksWebSocketHandler;
 import com.maxclay.exception.ResourceNotFoundException;
 import com.maxclay.exception.ValidationException;
 import com.maxclay.model.*;
 import com.maxclay.repository.TaskRepository;
+import com.maxclay.service.AlertService;
 import com.maxclay.service.RecognitionService;
 import com.maxclay.service.TaskService;
 import com.maxclay.service.VideoService;
@@ -50,6 +52,7 @@ public class TaskServiceImpl implements TaskService {
     private final RecognitionService recognitionService;
     private final ExecutorService executorService;
     private final TasksWebSocketHandler tasksWebSocketHandler;
+    private final AlertService alertService;
     private final VideoService videoService;
     private final NumberPlateSearchService plateSearchService;
 
@@ -58,6 +61,7 @@ public class TaskServiceImpl implements TaskService {
                            FilesUploadProperties filesUploadProperties,
                            RecognitionService recognitionService,
                            TasksWebSocketHandler tasksWebSocketHandler,
+                           AlertService alertService,
                            VideoService videoService,
                            NumberPlateSearchService plateSearchService) {
 
@@ -67,6 +71,7 @@ public class TaskServiceImpl implements TaskService {
         this.recognitionService = recognitionService;
         this.executorService = Executors.newCachedThreadPool();
         this.tasksWebSocketHandler = tasksWebSocketHandler;
+        this.alertService = alertService;
         this.videoService = videoService;
         this.plateSearchService = plateSearchService;
     }
@@ -248,6 +253,7 @@ public class TaskServiceImpl implements TaskService {
                 if (!searchResult.isEmpty()) {
                     WantedTransport wantedTransport = searchResult.get(INDEX_OF_SINGLE_WANTED_TRANSPORT);
                     String imagePath = saveBinaryImageData(imageData, extension);
+                    alertService.sendAlert(task, wantedTransport);
                     task.addSuspicious(new SearchResult(wantedTransport, imagePath));
                 }
             }

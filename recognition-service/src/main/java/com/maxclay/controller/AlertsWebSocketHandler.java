@@ -1,7 +1,7 @@
 package com.maxclay.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.maxclay.model.Task;
+import com.maxclay.model.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.BinaryMessage;
@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * @author Vlad Glinskiy
  */
-public class TasksWebSocketHandler extends AbstractWebSocketHandler {
+public class AlertsWebSocketHandler extends AbstractWebSocketHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
@@ -42,19 +42,18 @@ public class TasksWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("Connection closed. Status: {}", status);
     }
 
-    public void sendTask(Task task) {
+    public void sendAlert(Alert alert) {
 
         if (this.webSocketSession == null || !this.webSocketSession.isOpen()) {
             return;
         }
 
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            TextMessage textMessage = new TextMessage(mapper.writeValueAsString(task));
+            ObjectMapper mapper = new ObjectMapper();
+            TextMessage textMessage = new TextMessage(mapper.writeValueAsString(alert));
             webSocketSession.sendMessage(textMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }
